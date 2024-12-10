@@ -11,6 +11,10 @@ const URL = 'http://localhost:8000/api/v1/';
 function App() {
   
   const [message, setMessage] = useState(''); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => setIsLoggedIn(true);
+  const handleLogout = () => setIsLoggedIn(false);
 
   useEffect(() => {
 
@@ -31,7 +35,8 @@ function App() {
     
     <div className="bg-gray-100">
       <Header />
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout}/>
+      <h1>Welcome to the CTD Practicum Blog App</h1>
       <main className="p-6">
         <PostList />
       </main>
