@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getAllData } from './util/index';
-import './App'
+import Header from "./util/Header";
+import Navbar from "./util/Navbar";
+import PostList from "./util/PostList";
+import './index.css';
+
 
 const URL = 'http://localhost:8000/api/v1/';
 
@@ -23,9 +27,16 @@ function App() {
 
   return (
     <>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold text-blue-600">Hello, Tailwind!</h1>
+      <h1>{message}</h1>
+    
+    <div className="bg-gray-100">
+      <Header />
+      <Navbar />
+      <main className="p-6">
+        <PostList />
+      </main>
     </div>
+  
     </>
   );
 
