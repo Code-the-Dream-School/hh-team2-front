@@ -1,80 +1,96 @@
-import React, {useState} from "react";
-const PostCard = () => {
-  const [postContent, setPostContent] = useState('');
-  const [image, setImage] = useState(null)
+import React, { useState } from "react";
 
+const PostCard = ({ onAddPost }) => {
+    const [postContent, setPostContent] = useState("");
+    const [image, setImage] = useState(null);
+    const [title, setTitle] = useState("");
 
+    const handleImageChange = (el) => {
+        const file = el.target.files[0];
+        if (file) {
+            setImage(URL.createObjectURL(file));
+        }
+    };
 
-  const handleImageChange = (el) => {
-    const file = el.target.files[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
-    }
-  };
+    const handlePost = () => {
+        if (!postContent.trim() && !image) {
+            alert("Please add some content or an image before publish.");
+            return;
+        }
 
-  const handlePost = () => {
-    if (!postContent.trim() && !image) {
-      alert('Please add some content or an image before publish.');
-      return;
-    }
-      console.log('Post content:', postContent);
-      console.log('Attached image:', image);
-      alert('Post published!');
-      
-      setPostContent('');
-      setImage(null);
-     
-  };
+        const newPost = {
+            title,
+            content: postContent,
+            image,
+        };
 
-  return (
-    <div className="w-full max-w-xl mx-auto bg-white shadow-md rounded-md p-4 sm:h-80 md:h-96 lg:h-104">
-    
-      <textarea
-        className="w-full h-60 max-w-xl border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        placeholder="What's on your mind?"
-        value={postContent}
-        onChange={(el) => setPostContent(el.target.value)}
-        rows="4"
-      />
+        onAddPost(newPost);
 
-      {image && (
-        <div className="mt-4">
-          <img
-            src={image}
-            alt="Preview"
-            className="w-full h-auto rounded-md mb-2"
-          />
-          <button
-            onClick={() => setImage(null)}
-            className="text-red-500 text-sm underline"
-          >
-            Remove Image
-          </button>
+        setPostContent("");
+        setImage(null);
+        setTitle("");
+    };
+
+    return (
+        <div className="w-full max-w-xl mx-auto bg-white shadow-md rounded-md p-4">
+            <input
+                type="text"
+                placeholder="Post Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 text-3xl font-serif text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <textarea
+                className="w-full h-60 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                placeholder="What's on your mind?"
+                value={postContent}
+                onChange={(el) => setPostContent(el.target.value)}
+                rows="4"
+            />
+            {image && (
+                <div className="mt-4 w-1/2 h-auto mb-4">
+                    <img
+                        src={image}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            )}
+
+            {image && (
+                <button
+                    onClick={() => setImage(null)}
+                    className="block text-sm cursor-pointer bg-red-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
+                >
+                    Remove Image
+                </button>
+            )}
+
+            <div className="flex items-center space-x-4 mt-4">
+                <label
+                    htmlFor="file-input"
+                    className="block text-sm cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
+                >
+                    {image ? "Change Image" : "Choose an image"}
+                </label>
+
+                <input
+                    id="file-input"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                />
+            </div>
+
+            <button
+                onClick={handlePost}
+                className="mt-2 w-full bg-blue-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
+            >
+                Publish
+            </button>
         </div>
-      )}
-     
-      <input
-      id="file-input"
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-      />
-
-      <button
-        onClick={handlePost}
-        className="mt-2 w-full bg-blue-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
-      >
-        Publish
-      </button>
-      </div>
-
-  
-
-  )
-}
-
+    );
+};
 
 export default PostCard;
-
-
