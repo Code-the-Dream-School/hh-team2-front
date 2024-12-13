@@ -3,6 +3,7 @@ import { getAllData } from './util/index';
 import Header from "./util/Header";
 import Navbar from "./util/Navbar";
 import PostList from "./util/PostList";
+import PostCard from './util/PostCard';
 import './index.css';
 
 
@@ -38,6 +39,11 @@ function App() {
       <Navbar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout}/>
       <h1>Welcome to the CTD Practicum Blog App</h1>
       <main className="p-6">
+      {isLoggedIn ? (
+            <PostCard />
+          ) : (
+            <div className="text-center text-red-500">Please log in to create a post.</div>
+          )}
         <PostList />
       </main>
     </div>
