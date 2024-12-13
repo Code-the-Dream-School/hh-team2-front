@@ -22,7 +22,7 @@ You will have two folders inside one team folder (one for front-end and one for 
 
 #### Running the front-end server in Visual Studio Code
 
-Note: In the below example, the group's front-end repository was named `bb-practicum-team1-front` and the back-end repository was named `bb-practicum-team-1-back`. Your repository will have a different name, but the rest should look the same
+Note: In the below example, the group's front-end repository was named `bb-practicum-team1-front` and the back-end repository was named `bb-practicum-team-1-back`. Your repository will have a different name, but the rest should look the same.
 ![vsc running](images/front-end-running-vsc.png)
 
 #### Running the front-end server in the browser
