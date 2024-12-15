@@ -1,11 +1,11 @@
 // import React, { useState, useEffect } from 'react';
 // import { getAllData } from './util/index';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Use Routes and Route from react-router-dom
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import Header from './components/header/Header'; // New Header
 import './index.css';
 import Login from './pages/forms/Login';
 import Home from "./pages/Home/home";
-import Profile from './pages/profile/Profile';
+import Profile from "./pages/profile/Profile";
 import Register from './pages/forms/Register';
 import PostsPage from './pages/posts-page/postsPage';
 import CreatePost from './pages/create-post/CreatePost';

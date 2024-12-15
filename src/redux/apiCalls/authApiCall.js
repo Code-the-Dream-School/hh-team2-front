@@ -1,4 +1,4 @@
-import { authActions } from "../slices/authSlice"; // Import actions from the auth slice
+import { authActions } from "../slices/authSlice"; 
 import { toast } from "react-toastify"; // Import toast for error notifications
 
 // Function to login the user
@@ -28,11 +28,11 @@ export function loginUser(user) {
         // Optional: Maybe redirect user to home page after login
         // history.push("/home");
       } else {
-        // Handle server errors (e.g. invalid credentials, etc.)
+       
         toast.error(data.message || 'Login failed');
       }
     } catch (error) {
-      // Handle any unexpected errors (e.g. network issues)
+      
       console.error(error);
       toast.error('An error occurred during login');
     }
@@ -41,27 +41,3 @@ export function loginUser(user) {
 
 
 
-// export function loginUser(user) {
-//     return async (dispatch) => {
-//       try {
-//         const { data } = await request.post("/api/auth/login",user);
-//         dispatch(authActions.login(data));
-//         localStorage.setItem("userInfo", JSON.stringify(data));
-//       } catch (error) {
-//         toast.error(error.response.data.message);
-//       }
-//     }
-// }
-
-
-//     // Register User
-// export function registerUser(user) {
-//     return async (dispatch) => {
-//       try {
-//         const { data } = await request.post("/api/auth/register",user);
-//         dispatch(authActions.register(data.message));
-//       } catch (error) {
-//         toast.error(error.response.data.message);
-//       }
-//     }
-//   }

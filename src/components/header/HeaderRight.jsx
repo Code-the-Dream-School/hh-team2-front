@@ -35,7 +35,7 @@ const HeaderRight = () => {
             alt="Profile"
             className="w-8 h-8 rounded-full cursor-pointer" // Image size and rounded corners
           />
-          {/* Dropdown Menu below the profile picture */}
+         
           {dropdown && (
             <div className="absolute mt-2 bg-white shadow-lg rounded-md w-48 border border-gray-200 z-10">
               <div
