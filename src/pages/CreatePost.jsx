@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import CreatePost from "../pages/create-post/CreatePost";
 
-const PostCard = ({ onAddPost }) => {
+
+const CreatePost = ({ onAddPost }) => {
     const [postContent, setPostContent] = useState("");
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState("");
@@ -41,10 +43,10 @@ const PostCard = ({ onAddPost }) => {
                 className="w-full p-2 border rounded-md mb-4 text-3xl font-serif text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <textarea
-                className="w-full h-60 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                className="w-full h-60 text-lg font-sans text-gray-700 placeholder-gray-400 focus:outline-none mb-4 resize-none"
                 placeholder="What's on your mind?"
                 value={postContent}
-                onChange={(el) => setPostContent(el.target.value)}
+                onChange={(e) => setPostContent(e.target.value)}
                 rows="4"
             />
             {image && (
@@ -69,7 +71,7 @@ const PostCard = ({ onAddPost }) => {
             <div className="flex items-center space-x-4 mt-4">
                 <label
                     htmlFor="file-input"
-                    className="block text-sm cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
+                    className="block text-sm cursor-pointer bg-gray-100 text-gray-600 py-2 px-4 rounded hover:bg-gray-200 transition"
                 >
                     {image ? "Change Image" : "Choose an image"}
                 </label>
@@ -85,7 +87,7 @@ const PostCard = ({ onAddPost }) => {
 
             <button
                 onClick={handlePost}
-                className="mt-2 w-full bg-blue-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
+                className="mt-2 w-full bg-grey-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
             >
                 Publish
             </button>
@@ -93,4 +95,4 @@ const PostCard = ({ onAddPost }) => {
     );
 };
 
-export default PostCard;
+export default CreatePost;

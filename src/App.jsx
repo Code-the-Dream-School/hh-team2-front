@@ -1,5 +1,4 @@
-// import React, { useState, useEffect } from 'react';
-// import { getAllData } from './util/index';
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import Header from './components/header/Header'; // New Header
 import './index.css';
@@ -12,28 +11,11 @@ import CreatePost from './pages/create-post/CreatePost';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import UpdateProfile from './pages/profile/UpdateProfile';
 
+
 const URL = "http://localhost:8000/api/v1/";
 
 function App() {
 
-  // const [message, setMessage] = useState(''); 
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // const handleLogin = () => setIsLoggedIn(true);
-  // const handleLogout = () => setIsLoggedIn(false);
-
-  // useEffect(() => {
-
-  //   (async () => {
-  //     const myData = await getAllData(URL)
-  //     setMessage(myData.data);
-  //   })();
-      
-  //   return () => {
-  //     console.log('unmounting');
-  //   }
-
-  // }, []);
 
   return (
     
