@@ -11,6 +11,8 @@ import PostsPage from './pages/posts-page/postsPage';
 import CreatePost from './pages/create-post/CreatePost';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import UpdateProfile from './pages/profile/UpdateProfile';
+import PostList from "./util/PostList.jsx";
+import PostCard from "./util/PostCard.jsx";
 
 
 const URL = 'http://localhost:8000/api/v1/';
