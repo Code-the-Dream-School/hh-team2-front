@@ -1,42 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CreatePost = () => {
     const [postContent, setPostContent] = useState("");
-    const [image, setImage] = useState(null);
+    const [images, setImages] = useState([]);
     const [title, setTitle] = useState("");
 
     const navigate = useNavigate();
 
-    const handleImageChange = (el) => {
-        const file = el.target.files[0];
-        if (file) {
-            setImage(URL.createObjectURL(file));
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("You must be logged in to create a post.");
+            navigate("../../pages/forms/Login.jsx"); 
         }
+    }, [navigate]);
+
+    const handleImageChange = (el) => {
+        const files = Array.from(el.target.files);
+        const newImages = [];
+
+        files.forEach((file) => {
+            if (file.size > 2 * 1024 * 1024) {
+                alert(`File ${file.name} is larger than 2MB.`);
+            } else if (images.length + newImages.length < 3) {
+                newImages.push(URL.createObjectURL(file));
+            } else {
+                alert("You can upload up to 3 images only.");
+            }
+        });
+
+        setImages((prevImages) => [...prevImages, ...newImages]);
     };
 
-    const handlePost = () => {
-        if (!postContent.trim() && !image) {
-            alert("Please add some content or an image before publish.");
+    const handleRemoveImage = (index) => {
+        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    };
+
+    const handlePost = async () => {
+        if (!title.trim() || !postContent.trim()) {
+            alert("Title and description are required.");
             return;
         }
 
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("You must be logged in to create a post.");
+            navigate("../../pages/forms/Login.jsx");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("content", postContent);
+            images.forEach((image, index) => {
+                formData.append(`image${index + 1}`, image);
+            });
       
 
-        const newPost = {
-            title,
-            content: postContent,
-            image,
-        };
+            const response = await axios.post("/api/v1/posts", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`, 
+                },
+            });
 
-        console.log("Post created:", newPost);
+            console.log("Post created successfully:", response.data);
 
         setPostContent("");
-        setImage(null);
+        setImages([]);
         setTitle("");
 
         navigate("../posts-page/postsPage.jsx");
-    };
+    }catch (error) {
+        console.error("Failed to create post:", error);
+        alert("Failed to create post. Please try again.");
+    }
+};
 
     return (
         <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-md p-4">
@@ -54,31 +96,47 @@ const CreatePost = () => {
                 onChange={(e) => setPostContent(e.target.value)}
                 rows="4"
             />
-            {image && (
-                <div className="mt-4 w-full h-auto mb-4">
+            <div className="mt-4">
+            {images.map((image, index) =>(
+                <div key={index} className="relative inline-block mr-4">
                     <img
-                        src={image}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
+                        src={URL.createObjectURL(image)}
+                        alt={`Preview ${index + 1}`}
+                        className="w-32 h-32 object-cover rounded"
                     />
-                </div>
-            )}
-
-            {image && (
+            <div className="flex justify-between mt-2">
+                            <label
+                                htmlFor={`replace-image-${index}`}
+                                className="block text-sm cursor-pointer bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
+                            >
+                                Change
+                            </label>
+                            <input
+                                id={`replace-image-${index}`}
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handleReplaceImage(index, e)}
+                            />
                 <button
-                    onClick={() => setImage(null)}
+                    onClick={() => handleRemoveImage(index)}
                     className="block text-sm cursor-pointer bg-red-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
                 >
                     Remove Image
                 </button>
+                </div>
+                </div>
+                
+            )
             )}
-
+</div>
+{images.length < 3 && (
             <div className="flex items-center space-x-4 mt-4">
                 <label
                     htmlFor="file-input"
                     className="block text-sm cursor-pointer bg-gray-100 text-gray-600 py-2 px-4 rounded hover:bg-gray-200 transition"
                 >
-                    {image ? "Change Image" : "Choose an image"}
+                    Add More Images
                 </label>
 
                 <input
@@ -87,12 +145,13 @@ const CreatePost = () => {
                     accept="image/*"
                     onChange={handleImageChange}
                     className="hidden"
+                    multiple
                 />
             </div>
-
+)}
             <button
                 onClick={handlePost}
-                className="mt-2 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
+                className="mt-6 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
             >
                 Publish
             </button>
