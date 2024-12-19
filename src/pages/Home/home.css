@@ -1,9 +1,31 @@
 /* home.css */
 .home-hero-header-layout {
+  /* .container { */
     margin-top: 10px; /* Add extra space between the logo and the title */
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    height: 100vh;
+    padding: 20 30px;
+    margin-top: 30vh;
+    /* background-color: red; */
   }
   
   .home-title {
     color: #082444; /* Customize the title color */
   }
   
+  .home {
+    /* background-color: rgb(232, 197, 132); */
+    background-color: transparent;
+    /* width: auto; */
+  }
+
+.intro_message {
+  text-align: center;
+  justify-items: center;
+  font-size: 1.5rem;
+  color: rgb(31, 65, 124);
+  max-width: 80%;
+  justify-content: flex-start;
+}
