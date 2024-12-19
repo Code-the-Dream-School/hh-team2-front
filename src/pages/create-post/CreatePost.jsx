@@ -73,7 +73,7 @@ const CreatePost = () => {
         setImages([]);
         setTitle("");
 
-        navigate("../posts-page/postsPage.jsx");
+        navigate("../posts-page/PostsPage.jsx");
     }catch (error) {
         console.error("Failed to create post:", error);
         alert("Failed to create post. Please try again.");
@@ -116,7 +116,7 @@ const CreatePost = () => {
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
-                                onChange={(e) => handleReplaceImage(index, e)}
+                                onChange={(e) => handleImageChange(index, e)}
                             />
                 <button
                     onClick={() => handleRemoveImage(index)}

@@ -7,7 +7,7 @@ import Login from './pages/forms/Login';
 import Home from "./pages/Home/home";
 import Profile from "./pages/profile/Profile";
 import Register from './pages/forms/Register';
-import PostsPage from './pages/posts-page/postsPage';
+import PostsPage from './pages/posts-page/PostsPage';
 import CreatePost from './pages/create-post/CreatePost';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import UpdateProfile from './pages/profile/UpdateProfile';
