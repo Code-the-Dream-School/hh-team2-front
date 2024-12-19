@@ -4,7 +4,7 @@ import axios from "axios";
 
 const CreatePost = () => {
     const [postContent, setPostContent] = useState("");
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState(null);
     const [title, setTitle] = useState("");
 
     const navigate = useNavigate();
@@ -13,32 +13,26 @@ const CreatePost = () => {
         const token = localStorage.getItem("token");
         if (!token) {
             alert("You must be logged in to create a post.");
-            navigate("../../pages/forms/Login.jsx"); 
+            navigate("/login");
         }
     }, [navigate]);
 
     const handleImageChange = (el) => {
-        const files = Array.from(el.target.files);
-        const newImages = [];
+        const files = el.target.files[0];
 
-        files.forEach((file) => {
-            if (file.size > 2 * 1024 * 1024) {
-                alert(`File ${file.name} is larger than 2MB.`);
-            } else if (images.length + newImages.length < 3) {
-                newImages.push(URL.createObjectURL(file));
-            } else {
-                alert("You can upload up to 3 images only.");
-            }
-        });
-
-        setImages((prevImages) => [...prevImages, ...newImages]);
+        if (files.size > 2 * 1024 * 1024) {
+            alert(`File ${files.name} is larger than 2MB.`);
+        } else {
+            setImages(files);
+        }
     };
 
-    const handleRemoveImage = (index) => {
-        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    const handleRemoveImage = () => {
+        setImages(null);
     };
 
     const handlePost = async () => {
+        
         if (!title.trim() || !postContent.trim()) {
             alert("Title and description are required.");
             return;
@@ -47,38 +41,52 @@ const CreatePost = () => {
         const token = localStorage.getItem("token");
         if (!token) {
             alert("You must be logged in to create a post.");
-            navigate("../../pages/forms/Login.jsx");
+            navigate("/login");
             return;
         }
 
-        try {
+       
             const formData = new FormData();
             formData.append("title", title);
             formData.append("content", postContent);
-            images.forEach((image, index) => {
-                formData.append(`image${index + 1}`, image);
-            });
-      
-
-            const response = await axios.post("/api/v1/posts", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${token}`, 
-                },
-            });
+            if (images) {
+                formData.append("image", images);
+            }
+ try {
+            const response = await axios.post(
+                "http://localhost:8000/api/v1/posts",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                }
+            );
 
             console.log("Post created successfully:", response.data);
 
-        setPostContent("");
-        setImages([]);
-        setTitle("");
+            setPostContent("");
+            setImages(null);
+            setTitle("");
 
-        navigate("../posts-page/PostsPage.jsx");
-    }catch (error) {
-        console.error("Failed to create post:", error);
-        alert("Failed to create post. Please try again.");
-    }
-};
+            navigate("/posts");
+        } catch (error) {
+            console.error("Failed to create post:", error);
+
+            const errorMessage =
+            error.response?.data?.message || "Failed to create post. Please try again.";
+
+            if (error.response?.status === 401) {
+                alert("Your session has expired. Please log in again.");
+                navigate("/login");
+            } else {
+                alert(errorMessage);
+            }
+        }
+    };
 
     return (
         <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-md p-4">
@@ -91,52 +99,36 @@ const CreatePost = () => {
             />
             <textarea
                 className="w-full h-96 text-lg font-sans text-gray-700 placeholder-gray-400 focus:outline-none mb-4 resize-none"
-                placeholder="What's on your mind?"
+                placeholder="Create your post"
                 value={postContent}
                 onChange={(e) => setPostContent(e.target.value)}
                 rows="4"
             />
-            <div className="mt-4">
-            {images.map((image, index) =>(
-                <div key={index} className="relative inline-block mr-4">
+            {images && (
+                <div className="mt-4 w-full h-auto mb-4">
                     <img
-                        src={URL.createObjectURL(image)}
-                        alt={`Preview ${index + 1}`}
-                        className="w-32 h-32 object-cover rounded"
+                        src={URL.createObjectURL(images)}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
                     />
-            <div className="flex justify-between mt-2">
-                            <label
-                                htmlFor={`replace-image-${index}`}
-                                className="block text-sm cursor-pointer bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
-                            >
-                                Change
-                            </label>
-                            <input
-                                id={`replace-image-${index}`}
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => handleImageChange(index, e)}
-                            />
+                </div>
+            )}
+
+            {images && (
                 <button
-                    onClick={() => handleRemoveImage(index)}
+                    onClick={() => setImages(null)}
                     className="block text-sm cursor-pointer bg-red-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
                 >
                     Remove Image
                 </button>
-                </div>
-                </div>
-                
-            )
             )}
-</div>
-{images.length < 3 && (
+
             <div className="flex items-center space-x-4 mt-4">
                 <label
                     htmlFor="file-input"
-                    className="block text-sm cursor-pointer bg-gray-100 text-gray-600 py-2 px-4 rounded hover:bg-gray-200 transition"
+                    className="block text-sm cursor-pointer bg-gray-500 text-white py-2 px-4 rounded-md text-center hover:bg-gray-200 transition"
                 >
-                    Add More Images
+                    {images ? "Change Image" : "Choose an image"}
                 </label>
 
                 <input
@@ -145,10 +137,9 @@ const CreatePost = () => {
                     accept="image/*"
                     onChange={handleImageChange}
                     className="hidden"
-                    multiple
                 />
             </div>
-)}
+
             <button
                 onClick={handlePost}
                 className="mt-6 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
