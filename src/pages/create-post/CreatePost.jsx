@@ -16,7 +16,7 @@ const CreatePost = () => {
     const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        if (!user || token) {
+        if (!user && !token) {
             alert("You must be logged in to create a post.");
             navigate("/login", { replace: true });
         } 
