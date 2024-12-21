@@ -39,42 +39,22 @@ const App = () => {
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} /> 
           <Route path="/posts" element={<PostsPage />} />
-          <Route
-                    path="/posts/create-post"
-                    element={
-                        <ProtectedRoute>
+          <Route path="/posts/create-post" element={<ProtectedRoute>
                             <CreatePost />
-                        </ProtectedRoute>
-                    }
-                />
-          <Route
-                    path="/admin-dashboard"
-                    element={
-                        <ProtectedRoute>
+                        </ProtectedRoute>} />
+          <Route path="/admin-dashboard" element={<ProtectedRoute>
                             <AdminDashboard />
-                        </ProtectedRoute>
-                    }
-                />
+                        </ProtectedRoute>} /> 
           
          
-          <Route
-                    path="/profile"
-                    element={
-                        <ProtectedRoute>
+          <Route path="/profile" element={<ProtectedRoute>
                             <Profile />
-                        </ProtectedRoute>
-                    }
-                />{" "} {/* Profile Page */}
+                        </ProtectedRoute>} /> {/* Profile Page */}
           
         
-          <Route
-                    path="/profile/update"
-                    element={
-                        <ProtectedRoute>
+          <Route path="/profile/update" element={<ProtectedRoute>
                             <UpdateProfile />
-                        </ProtectedRoute>
-                    }
-                /> {/* Update Profile Page */}
+                        </ProtectedRoute>} /> {/* Update Profile Page */}
         </Routes>
         <Footer />
         </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const CreatePost = () => {
     const [postContent, setPostContent] = useState("");
@@ -10,25 +11,16 @@ const CreatePost = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const navigate = useNavigate();
+    const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
-            const token = localStorage.getItem("token");
-            if (!token) {
-                alert("You must be logged in to create a post.");
-                navigate("/login", { replace: true });
-            } else {
-                setIsAuthenticated(true);
-            }
-       
-       
-    }, [navigate]);
-
-    if (!isAuthenticated) {
-        return <div>Loading...</div>; 
-    }
+        if (!user || token) {
+            alert("You must be logged in to create a post.");
+            navigate("/login", { replace: true });
+        } 
+    }, [user, token, navigate]);
 
     const handleImageChange = (el) => {
         const files = el.target.files[0];
@@ -52,7 +44,6 @@ const CreatePost = () => {
 
         setLoading(true);
         setError(null);
-        setSuccess(false);
 
         const formData = new FormData();
         formData.append("title", title);
@@ -60,6 +51,7 @@ const CreatePost = () => {
         if (images) {
             formData.append("image", images);
         }
+
         try {
             const response = await axios.post(
                 "http://localhost:8000/api/v1/posts",
@@ -84,17 +76,15 @@ const CreatePost = () => {
             navigate("/posts");
         } catch (error) {
             console.error("Failed to create post:", error);
-
-            const errorMessage =
+            setError(
                 error.response?.data?.message ||
-                "Failed to create post. Please try again.";
-                setLoading(false);
+                    "Failed to create post. Please try again."
+            );
+            setLoading(false);
 
             if (error.response?.status === 401) {
                 alert("Your session has expired. Please log in again.");
                 navigate("/login", { replace: true });
-            } else {
-                setLoading(false);
             }
         }
     };
