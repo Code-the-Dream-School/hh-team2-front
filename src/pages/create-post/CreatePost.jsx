@@ -51,6 +51,11 @@ const CreatePost = () => {
             return;
         }
 
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            setError(null);
+            setSuccess(false);
        
             const formData = new FormData();
             formData.append("title", title);
@@ -58,6 +63,9 @@ const CreatePost = () => {
             if (images) {
                 formData.append("image", images);
             }
+
+             const userinfo = JSON.parse(localStorage.getItem("userinfo"));
+    const token = userinfo.token;
  try {
             const response = await axios.post(
                 "http://localhost:8000/api/v1/posts",
@@ -74,6 +82,7 @@ const CreatePost = () => {
 
             console.log("Post created successfully:", response.data);
 
+            setSuccess(true);
             setPostContent("");
             setImages(null);
             setTitle("");
@@ -89,7 +98,7 @@ const CreatePost = () => {
                 alert("Your session has expired. Please log in again.");
                 navigate("/login");
             } else {
-                alert(errorMessage);
+                setLoading(false);
             }
         }
     };
