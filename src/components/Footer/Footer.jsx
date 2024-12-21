@@ -60,7 +60,13 @@ const Footer = () => {
                     </a>
                 </div>
                 <p className="text-sm text-gray-400">
-                        © 2024 Code the Dream. All Rights Reserved.
+                        © 2024 Code the Dream. | All Rights Reserved. |{" "}
+                        <a
+                        href="https://codethedream.org/privacy-policy"
+                        className="hover:underline text-gray-300"
+                    >
+                        Privacy Policy
+                    </a>
                     </p>
             </div>
         </footer>
