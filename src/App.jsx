@@ -39,14 +39,42 @@ const App = () => {
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} /> 
           <Route path="/posts" element={<PostsPage />} />
-          <Route path="/posts/create-post" element={<CreatePost />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} /> 
+          <Route
+                    path="/posts/create-post"
+                    element={
+                        <ProtectedRoute>
+                            <CreatePost />
+                        </ProtectedRoute>
+                    }
+                />
+          <Route
+                    path="/admin-dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <AdminDashboard />
+                        </ProtectedRoute>
+                    }
+                />
           
          
-          <Route path="/profile" element={<Profile />} /> {/* Profile Page */}
+          <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />{" "} {/* Profile Page */}
           
         
-          <Route path="/profile/update" element={<UpdateProfile />} /> {/* Update Profile Page */}
+          <Route
+                    path="/profile/update"
+                    element={
+                        <ProtectedRoute>
+                            <UpdateProfile />
+                        </ProtectedRoute>
+                    }
+                /> {/* Update Profile Page */}
         </Routes>
         <Footer />
         </div>
