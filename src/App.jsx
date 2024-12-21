@@ -11,6 +11,7 @@ import PostsPage from './pages/posts-page/postsPage';
 import CreatePost from './pages/create-post/CreatePost';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import UpdateProfile from './pages/profile/UpdateProfile';
+import Footer from "./components/Footer/Footer";
 
 
 const URL = 'http://localhost:8000/api/v1/';
@@ -39,6 +40,7 @@ function App() {
   return (
     
       <Router>
+      <div className="min-h-screen flex flex-col">
         <Header />
         <Routes>
         
@@ -55,6 +57,8 @@ function App() {
         
           <Route path="/profile/update" element={<UpdateProfile />} /> {/* Update Profile Page */}
         </Routes>
+        <Footer />
+        </div>
       </Router>
     );
   }
