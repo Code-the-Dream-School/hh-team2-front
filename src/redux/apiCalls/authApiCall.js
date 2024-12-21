@@ -24,6 +24,7 @@ export function loginUser(user) {
         
         // Save user data to localStorage for persistence (across sessions)
         localStorage.setItem("userinfo", JSON.stringify(data));
+        localStorage.setItem("token", data.token);
 
         // Optional: Maybe redirect user to home page after login
         // history.push("/home");

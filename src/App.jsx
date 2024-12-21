@@ -1,9 +1,14 @@
-// import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // import { getAllData } from './util/index';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
-import Header from './components/header/Header'; // New Header
-import './index.css';
-import Login from './pages/forms/Login';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from "react-router-dom";
+import Header from "./components/header/Header"; // New Header
+import "./index.css";
+import Login from "./pages/forms/Login";
 import Home from "./pages/Home/home";
 import Profile from "./pages/profile/Profile";
 import Register from './pages/forms/Register';
@@ -14,28 +19,14 @@ import UpdateProfile from './pages/profile/UpdateProfile';
 import Footer from "./components/Footer/Footer";
 
 
-const URL = 'http://localhost:8000/api/v1/';
+const URL = "http://localhost:8000/api/v1/";
 
-function App() {
+const App = () => {
+    const isAuthenticated = () => !!localStorage.getItem("token");
 
-  // const [message, setMessage] = useState(''); 
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // const handleLogin = () => setIsLoggedIn(true);
-  // const handleLogout = () => setIsLoggedIn(false);
-
-  // useEffect(() => {
-
-  //   (async () => {
-  //     const myData = await getAllData(URL)
-  //     setMessage(myData.data);
-  //   })();
-      
-  //   return () => {
-  //     console.log('unmounting');
-  //   }
-
-  // }, []);
+    const ProtectedRoute = ({ children }) => {
+        return isAuthenticated() ? children : <Navigate to="/login" replace />;
+    };
 
   return (
     
@@ -48,21 +39,27 @@ function App() {
           <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} /> 
           <Route path="/posts" element={<PostsPage />} />
-          <Route path="/posts/create-post" element={<CreatePost />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} /> 
+          <Route path="/posts/create-post" element={<ProtectedRoute>
+                            <CreatePost />
+                        </ProtectedRoute>} />
+          <Route path="/admin-dashboard" element={<ProtectedRoute>
+                            <AdminDashboard />
+                        </ProtectedRoute>} /> 
           
          
-          <Route path="/profile" element={<Profile />} /> {/* Profile Page */}
+          <Route path="/profile" element={<ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>} /> {/* Profile Page */}
           
         
-          <Route path="/profile/update" element={<UpdateProfile />} /> {/* Update Profile Page */}
+          <Route path="/profile/update" element={<ProtectedRoute>
+                            <UpdateProfile />
+                        </ProtectedRoute>} /> {/* Update Profile Page */}
         </Routes>
         <Footer />
         </div>
       </Router>
     );
-  }
+};
 
 export default App;
-
-
