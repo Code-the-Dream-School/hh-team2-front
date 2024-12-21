@@ -10,18 +10,25 @@ const CreatePost = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(null);
-
-    
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("You must be logged in to create a post.");
-            navigate("/login");
-        }
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("You must be logged in to create a post.");
+                navigate("/login", { replace: true });
+            } else {
+                setIsAuthenticated(true);
+            }
+       
+       
     }, [navigate]);
+
+    if (!isAuthenticated) {
+        return <div>Loading...</div>; 
+    }
 
     const handleImageChange = (el) => {
         const files = el.target.files[0];
@@ -38,35 +45,22 @@ const CreatePost = () => {
     };
 
     const handlePost = async () => {
-        
         if (!title.trim() || !postContent.trim()) {
             alert("Title and description are required.");
             return;
         }
 
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("You must be logged in to create a post.");
-            navigate("/login");
-            return;
+        setLoading(true);
+        setError(null);
+        setSuccess(false);
+
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("content", postContent);
+        if (images) {
+            formData.append("image", images);
         }
-
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-            setLoading(true);
-            setError(null);
-            setSuccess(false);
-       
-            const formData = new FormData();
-            formData.append("title", title);
-            formData.append("content", postContent);
-            if (images) {
-                formData.append("image", images);
-            }
-
-             const userinfo = JSON.parse(localStorage.getItem("userinfo"));
-    const token = userinfo.token;
- try {
+        try {
             const response = await axios.post(
                 "http://localhost:8000/api/v1/posts",
                 formData,
@@ -92,11 +86,13 @@ const CreatePost = () => {
             console.error("Failed to create post:", error);
 
             const errorMessage =
-            error.response?.data?.message || "Failed to create post. Please try again.";
+                error.response?.data?.message ||
+                "Failed to create post. Please try again.";
+                setLoading(false);
 
             if (error.response?.status === 401) {
                 alert("Your session has expired. Please log in again.");
-                navigate("/login");
+                navigate("/login", { replace: true });
             } else {
                 setLoading(false);
             }
@@ -104,16 +100,16 @@ const CreatePost = () => {
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto bg-white shadow-md rounded-md p-4">
+        <div className="w-full max-w-2xl mt-8 mx-auto bg-white border-2 shadow-2xl rounded-md p-4">
             <input
                 type="text"
                 placeholder="Post Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 border rounded-md mb-4 text-3xl font-serif text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full p-2 border rounded-md mb-4 mt-4 text-3xl font-serif text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <textarea
-                className="w-full h-96 text-lg font-sans text-gray-700 placeholder-gray-400 focus:outline-none mb-4 resize-none"
+                className="w-full h-96 text-lg font-sans text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4 resize-none"
                 placeholder="Create your post"
                 value={postContent}
                 onChange={(e) => setPostContent(e.target.value)}
@@ -131,7 +127,7 @@ const CreatePost = () => {
 
             {images && (
                 <button
-                    onClick={() => setImages(null)}
+                    onClick={handleRemoveImage}
                     className="block text-sm cursor-pointer bg-red-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
                 >
                     Remove Image
@@ -157,10 +153,21 @@ const CreatePost = () => {
 
             <button
                 onClick={handlePost}
-                className="mt-6 w-full bg-gray-800 text-white py-2 rounded-md hover:bg-blue-600 transition"
+                className={`mt-6 w-full bg-gray-800 text-white py-2 rounded-md ${
+                    loading
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-blue-600"
+                } transition`}
+                disabled={loading}
             >
-                Publish
+                {loading ? "Publishing..." : "Publish"}
             </button>
+            {error && <p className="text-red-500 mt-4">{error}</p>}
+            {success && (
+                <p className="text-green-500 mt-4">
+                    Post created successfully!
+                </p>
+            )}
         </div>
     );
 };
