@@ -7,6 +7,12 @@ const CreatePost = () => {
     const [images, setImages] = useState(null);
     const [title, setTitle] = useState("");
 
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(null);
+
+    
+
     const navigate = useNavigate();
 
     useEffect(() => {
