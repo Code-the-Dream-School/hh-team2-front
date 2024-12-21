@@ -16,9 +16,12 @@ const CreatePost = () => {
     const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
+        
         if (!user && !token) {
-            alert("You must be logged in to create a post.");
+            console.log("Redirecting because no user or token");
+         
             navigate("/login", { replace: true });
+            
         } 
     }, [user, token, navigate]);
 
