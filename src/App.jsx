@@ -11,11 +11,13 @@ import "./index.css";
 import Login from "./pages/forms/Login";
 import Home from "./pages/Home/home";
 import Profile from "./pages/profile/Profile";
-import Register from "./pages/forms/Register";
-import PostsPage from "./pages/posts-page/PostsPage";
-import CreatePost from "./pages/create-post/CreatePost";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
-import UpdateProfile from "./pages/profile/UpdateProfile";
+import Register from './pages/forms/Register';
+import PostsPage from './pages/posts-page/postsPage';
+import CreatePost from './pages/create-post/CreatePost';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import UpdateProfile from './pages/profile/UpdateProfile';
+import Footer from "./components/Footer/Footer";
+
 
 const URL = "http://localhost:8000/api/v1/";
 
@@ -26,50 +28,29 @@ const App = () => {
         return isAuthenticated() ? children : <Navigate to="/login" replace />;
     };
 
-    return (
-        <Router>
-            <Header />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/posts" element={<PostsPage />} />
-                <Route
-                    path="/posts/create-post"
-                    element={
-                        <ProtectedRoute>
-                            <CreatePost />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/admin-dashboard"
-                    element={
-                        <ProtectedRoute>
-                            <AdminDashboard />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/profile"
-                    element={
-                        <ProtectedRoute>
-                            <Profile />
-                        </ProtectedRoute>
-                    }
-                />{" "}
-                {/* Profile Page */}
-                <Route
-                    path="/profile/update"
-                    element={
-                        <ProtectedRoute>
-                            <UpdateProfile />
-                        </ProtectedRoute>
-                    }
-                />
-                {/* Update Profile Page */}
-            </Routes>
-        </Router>
+  return (
+    
+      <Router>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <Routes>
+        
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} /> 
+          <Route path="/register" element={<Register />} /> 
+          <Route path="/posts" element={<PostsPage />} />
+          <Route path="/posts/create-post" element={<CreatePost />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} /> 
+          
+         
+          <Route path="/profile" element={<Profile />} /> {/* Profile Page */}
+          
+        
+          <Route path="/profile/update" element={<UpdateProfile />} /> {/* Update Profile Page */}
+        </Routes>
+        <Footer />
+        </div>
+      </Router>
     );
 };
 
