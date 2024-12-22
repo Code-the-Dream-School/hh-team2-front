@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/apiCalls/authApiCall";
 
@@ -18,7 +17,7 @@ const Login = () => {
         if(password.trim() === "") return toast.error("Password is required");
 
         dispatch(loginUser({ email, password }));
-        navigate('/');
+        navigate('/Profile.jsx');
     }
 
     return ( 
@@ -57,6 +56,14 @@ const Login = () => {
                         Login
                     </button>
                 </form>
+
+                {/* Signup Link */}
+                <div className="text-center mt-4">
+                    <p className="text-sm text-gray-600">
+                        Don't have an account? 
+                        <Link to="/register" className="text-blue-600 hover:text-blue-700 font-semibold">Signup</Link>
+                    </p>
+                </div>
             </div>
         </section>
     );
