@@ -1,9 +1,36 @@
 /* home.css */
 .home-hero-header-layout {
-    margin-top: 10px; /* Add extra space between the logo and the title */
-  }
+    margin-top: 10px; 
+    /* justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20 30px; */
+ }
   
   .home-title {
     color: #082444; /* Customize the title color */
   }
   
+  .home {
+    /* background-color: rgb(232, 197, 132); */
+    background-color: transparent;
+    /* width: auto; */
+  }
+
+/* .intro_message {
+  text-align: center;
+  justify-items: center;
+  font-size: 1.5rem;
+  color: rgb(31, 65, 124);
+  max-width: 80%;
+  justify-content: flex-start;
+} */
+
+/* .intro_message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 5rem;
+  padding: 15rem; 
+} */
