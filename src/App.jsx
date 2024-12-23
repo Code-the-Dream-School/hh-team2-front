@@ -19,11 +19,15 @@ import UpdateProfile from './pages/profile/UpdateProfile';
 import PostList from "./util/PostList.jsx";
 import PostCard from "./util/PostCard.jsx";
 import Footer from "./components/Footer/Footer";
+import { useSelector } from "react-redux";
 
 
 const URL = "http://localhost:8000/api/v1/";
 
 const App = () => {
+
+    const {user} = useSelector(state => state.auth);
+
     const isAuthenticated = () => !!localStorage.getItem("token");
 
     const ProtectedRoute = ({ children }) => {
@@ -38,15 +42,13 @@ const App = () => {
         <Routes>
         
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} /> 
-          <Route path="/register" element={<Register />} /> 
-          <Route path="/posts" element={<PostsPage />} />
+          <Route path="/login" element={!user ?<Login /> : <Navigate to={"/"}/>} /> 
+          <Route path="/register" element={!user ?<Register /> : <Navigate to={"/"}/>} /> 
+          <Route path="/posts" element={<ProtectedRoute><PostsPage /></ProtectedRoute>} />
           <Route path="/posts/create-post" element={<ProtectedRoute>
                             <CreatePost />
                         </ProtectedRoute>} />
-          <Route path="/admin-dashboard" element={<ProtectedRoute>
-                            <AdminDashboard />
-                        </ProtectedRoute>} /> 
+          <Route path="/admin-dashboard" element={user?.isAdmin ? <AdminDashboard /> : <Navigate to={"/"}/>} /> 
           
          
           <Route path="/profile" element={<ProtectedRoute>
