@@ -1,44 +1,72 @@
 import { authActions } from "../slices/authSlice"; 
-import { toast } from "react-toastify"; // Import toast for error notifications
+import { toast } from "react-toastify"; 
+import request from "../../utils/request";
 
 // Function to login the user
 export function loginUser(user) {
   return async (dispatch) => {
     try {
-      // Sending POST request to the server for login
-      const response = await fetch("http://localhost:8000/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify(user), // Send user credentials
-        headers: {
-          "Content-Type": "application/json", // Ensure server treats this as JSON
-        },
-      });
-
-      // Parsing the JSON response from the server
-      const data = await response.json();
-
-      // Check if response is successful (status code 200)
-      if (response.ok) {
-        // Dispatch the login action to update Redux store
+      const {data} = await request.post("/api/auth/login", user)
         dispatch(authActions.login(data)); // Store the user data in Redux
-        
-        // Save user data to localStorage for persistence (across sessions)
         localStorage.setItem("userinfo", JSON.stringify(data));
-        localStorage.setItem("token", data.token);
-
-        // Optional: Maybe redirect user to home page after login
-        // history.push("/home");
-      } else {
-       
-        toast.error(data.message || 'Login failed');
-      }
-    } catch (error) {
-      
-      console.error(error);
-      toast.error('An error occurred during login');
+       } catch (error) {
+        toast.error(error.response.data.message);
+         console.error(error);
     }
   };
 }
+
+// Register User
+// export function registerUser(user) {
+//   return async (dispatch) => {
+//     try {
+//       const { data } = await request.post("/api/auth/register",user);
+//       dispatch(authActions.register(data.message));
+//     } catch (error) {
+//       toast.error(error.response.data.message);
+//     }
+//   }
+// }
+
+
+export function registerUser(user) {
+  return async (dispatch) => {
+    try {
+  
+      const { data } = await request.post("/api/auth/register", user);
+      dispatch(authActions.register(data.message)); // Success message
+
+    } catch (error) {  
+      if (error.response) {
+        const errorMessage = error.response?.data?.message || "An error occurred on the server.";
+        dispatch(authActions.register(errorMessage));
+        toast.error(errorMessage); 
+      } else if (error.request) { 
+        const networkErrorMessage = "Network error. Please check your internet connection.";
+        dispatch(authActions.register(networkErrorMessage));
+        toast.error(networkErrorMessage);
+      } else {
+        const unexpectedErrorMessage = "An unexpected error occurred.";
+        dispatch(authActions.register(unexpectedErrorMessage));
+        toast.error(unexpectedErrorMessage);
+      }
+    }
+  };
+}
+
+
+
+
+
+
+// #Mohammed
+// // Logout User
+// export function logoutUser() {
+//   return (dispatch) => {
+//     dispatch(authActions.logout());
+//     localStorage.removeItem("userInfo");
+//   }
+// }
 
 
 

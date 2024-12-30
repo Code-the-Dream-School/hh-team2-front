@@ -19,11 +19,17 @@ import UpdateProfile from "./pages/profile/UpdateProfile";
 import PostList from "./util/PostList.jsx";
 import PostCard from "./util/PostCard.jsx";
 import Footer from "./components/Footer/Footer";
+import { useSelector } from "react-redux";
 
 const URL = "http://localhost:8000/api/v1/";
 
 const App = () => {
-  const isAuthenticated = () => !!localStorage.getItem("token");
+
+
+    const {user} = useSelector(state => state.auth);
+
+    const isAuthenticated = () => !!localStorage.getItem("token");
+
 
   const ProtectedRoute = ({ children }) => {
     return isAuthenticated() ? children : <Navigate to="/login" replace />;
@@ -35,44 +41,13 @@ const App = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/posts" element={<PostsPage />} />
-          <Route
-            path="/posts/create-post"
-            element={
-              <ProtectedRoute>
-                <CreatePost />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin-dashboard"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />{" "}
-          {/* Profile Page */}
-          <Route
-            path="/profile/update"
-            element={
-              <ProtectedRoute>
-                <UpdateProfile />
-              </ProtectedRoute>
-            }
-          />{" "}
-          {/* Update Profile Page */}
-          <Route path="/" element={<PostList />} />
+          <Route path="/login" element={!user ?<Login /> : <Navigate to={"/"}/>} /> 
+          <Route path="/register" element={!user ?<Register /> : <Navigate to={"/"}/>} /> 
+          <Route path="/posts" element={<ProtectedRoute><PostsPage /></ProtectedRoute>} />
+          <Route path="/posts/create-post" element={<ProtectedRoute><CreatePost /></ProtectedRoute>} />
+          <Route path="/admin-dashboard" element={user?.isAdmin ? <AdminDashboard /> : <Navigate to={"/"}/>} /> 
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} /> {/* Profile Page */}
+          <Route path="/profile/update" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} /> {/* Update Profile Page */}
         </Routes>
         <Footer />
       </div>

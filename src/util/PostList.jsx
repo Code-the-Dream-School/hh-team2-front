@@ -74,6 +74,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../redux/slices/postSlice";
 import PostCard from "./PostCard";
 
+
 const PostList = () => {
   const dispatch = useDispatch();
 
@@ -134,6 +135,8 @@ const PostList = () => {
           Next
         </button>
       </div>
+
+
     </div>
   );
 };
