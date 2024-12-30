@@ -1,61 +1,61 @@
-import PostCard from "./PostCard";
+// import PostCard from "./PostCard";
 
-const posts = [
-  {
-    id: 1,
-    title: "Title1",
-    date: "Mar 22, 2023",
-    subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-    image: "https://cdn.pixabay.com/photo/2024/12/05/21/57/santa-claus-9247511_960_720.jpg",
-    comments: 2,
-    author: "John Doe", 
-  },
-  {
-    id: 2,
-    title: "Title2",
-    date: "Mar 22, 2023",
-    subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-    image: "https://cdn.pixabay.com/photo/2023/04/24/06/08/bottlebrushes-7947303_960_720.jpg",
-    comments: 0,
-    author: "Jane Smith", 
-  },
-  {
-    id: 3,
-    title: "Title 3",
-    date: "Mar 22, 2023",
-    subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-    image: "https://cdn.pixabay.com/photo/2024/03/02/07/09/car-8607713_960_720.jpg",
-    comments: 1,
-    author: "Alex Johnson",
-  },
-  // {
-  //   id: 4,
-  //   title: "Title 4",
-  //   date: "Mar 22, 2023",
-  //   subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-  //   image: "https://via.placeholder.com/300",
-  //   comments: 1,
-  //   author: "Chris Lee", 
-  // },
-  // {
-  //   id: 5,
-  //   title: "Title 5",
-  //   date: "Mar 22, 2023",
-  //   subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-  //   image: "https://via.placeholder.com/300",
-  //   comments: 1,
-  //   author: "Patricia Green", 
-  // },
-  // {
-  //   id: 6,
-  //   title: "Title 6",
-  //   date: "Mar 22, 2023",
-  //   subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-  //   image: "https://via.placeholder.com/300",
-  //   comments: 1,
-  //   author: "Mike Brown",
-  // },
-];
+// const posts = [
+//   {
+//     id: 1,
+//     title: "Title1",
+//     date: "Mar 22, 2023",
+//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
+//     image: "https://via.placeholder.com/300",
+//     views: 15,
+//     comments: 2,
+//   },
+//   {
+//     id: 2,
+//     title: "Title2",
+//     date: "Mar 22, 2023",
+//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
+//     image: "https://via.placeholder.com/300",
+//     views: 0,
+//     comments: 0,
+//   },
+//   {
+//     id: 3,
+//     title: "Title 3",
+//     date: "Mar 22, 2023",
+//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
+//     image: "https://via.placeholder.com/300",
+//     views: 5,
+//     comments: 1,
+//   },
+//   {
+//     id: 4,
+//     title: "Title 4",
+//     date: "Mar 22, 2023",
+//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
+//     image: "https://via.placeholder.com/300",
+//     views: 5,
+//     comments: 1,
+//   },
+//   {
+//     id: 5,
+//     title: "Title 5",
+//     date: "Mar 22, 2023",
+//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
+//     image: "https://via.placeholder.com/300",
+//     views: 5,
+//     comments: 1,
+//   },
+//   {
+//     id: 6,
+//     title: "Title 6",
+//     date: "Mar 22, 2023",
+//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
+//     image: "https://via.placeholder.com/300",
+//     views: 5,
+//     comments: 1,
+//   },
+// ];
 
 // function PostList() {
 //   return (
@@ -66,14 +66,79 @@ const posts = [
 //     </div>
 //   );
 // }
-function PostList() {
+
+// export default PostList;
+
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPosts } from "../redux/slices/postSlice";
+import PostCard from "./PostCard";
+
+
+const PostList = () => {
+  const dispatch = useDispatch();
+
+  const { posts, loading, error, currentPage, totalPages } = useSelector(
+    (state) => state.posts
+  );
+
+  useEffect(() => {
+    dispatch(fetchPosts({ page: currentPage }));
+  }, [dispatch, currentPage]);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      dispatch(fetchPosts({ page: currentPage - 1 }));
+    }
+  };
+
+  const handleNextPage = () => {
+    // console.log("page and totalPage", currentPage, totalPages);
+    if (currentPage < totalPages) {
+      dispatch(fetchPosts({ page: currentPage + 1 }));
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center mt-10 text-indigo-600">Loading posts...</div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-center mt-10 text-red-500">{error}</div>;
+  }
+
   return (
-    <div className="grid grid-cols-1 gap-8"> {/* i just change it to  only 1 column and comment the code above this part */}
-      {posts.map(post => (
-        <PostCard key={post.id} post={post} />
-      ))}
+    <div className="p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post) => (
+          <PostCard key={post._id} post={post} />
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-gray-200 rounded-md mr-2 disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-gray-200 rounded-md ml-2 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+
+
     </div>
   );
-}
+};
 
 export default PostList;
