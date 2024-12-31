@@ -4,7 +4,7 @@ import axios from "axios";
 // Fetch posts from the API
 export const fetchPosts = createAsyncThunk(
   "posts/fetchPosts",
-  async ({ page = 1, limit = 6 }, thunkAPI) => {
+  async ({ page = 1, limit = 4 }, thunkAPI) => {
     try {
       const response = await axios.get(
         `http://localhost:8000/api/v1/posts?page=${page}&limit=${limit}`

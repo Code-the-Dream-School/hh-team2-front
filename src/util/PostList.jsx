@@ -74,7 +74,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../redux/slices/postSlice";
 import PostCard from "./PostCard";
 
-
 const PostList = () => {
   const dispatch = useDispatch();
 
@@ -111,10 +110,20 @@ const PostList = () => {
 
   return (
     <div className="p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.map((post) => (
-          <PostCard key={post._id} post={post} />
-        ))}
+      <div className="home-hero-header text-center mb-8">
+        <img
+          src="/ctd.png"
+          alt="Code The Dream Logo"
+          className="logo-img w-100 h-24 mx-auto mb-6"
+        />
+      </div>
+
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+        <div className="w-full max-w-lg space-y-6">
+          {posts.map((post) => (
+            <PostCard key={post._id} post={post} />
+          ))}
+        </div>
       </div>
 
       {/* Pagination */}
@@ -135,8 +144,6 @@ const PostList = () => {
           Next
         </button>
       </div>
-
-
     </div>
   );
 };

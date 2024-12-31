@@ -13,12 +13,15 @@ const HeaderRight = () => {
   const logout = () => {
     dispatch(authActions.logout()); // Dispatch logout action
     localStorage.removeItem("userinfo"); // Clear user data from localStorage
+    localStorage.removeItem("token");
     toast.success("Logged out successfully"); // Show success message
   };
 
   // Check if user and first_name exist in the user object
   const userFirstName = user?.first_name || "Guest"; // Default to "Guest" if no name
-  const userProfilePic = user?.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png"; // Fallback image
+  const userProfilePic =
+    user?.profile_picture ||
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png"; // Fallback image
 
   return (
     <div className="flex items-center space-x-4">
@@ -34,16 +37,16 @@ const HeaderRight = () => {
           <img
             src={userProfilePic}
             alt="Profile"
-            className="w-8 h-8 rounded-full cursor-pointer" 
+            className="w-8 h-8 rounded-full cursor-pointer"
           />
 
           {dropdown && (
             <div
               className="absolute mt-2 bg-white shadow-lg rounded-md w-28 border border-gray-200 z-10"
               style={{
-                top: "100%", 
-                left: "-60px", 
-                marginTop: "8px", 
+                top: "100%",
+                left: "-60px",
+                marginTop: "8px",
               }}
             >
               {/* Profile link */}
@@ -52,7 +55,7 @@ const HeaderRight = () => {
                 onClick={() => setDropdown(false)} // Close dropdown on link click
                 className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-300 flex items-center space-x-2"
               >
-                <HiOutlineUser className="w-5 h-5 text-gray-600" /> 
+                <HiOutlineUser className="w-5 h-5 text-gray-600" />
                 <span>Profile</span>
               </Link>
 
@@ -61,7 +64,7 @@ const HeaderRight = () => {
                 onClick={logout}
                 className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-300 flex items-center space-x-2"
               >
-                <HiOutlineLogout className="w-5 h-5 text-gray-600" /> 
+                <HiOutlineLogout className="w-5 h-5 text-gray-600" />
                 <span>Logout</span>
               </div>
             </div>
