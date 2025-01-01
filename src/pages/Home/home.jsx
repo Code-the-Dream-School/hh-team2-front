@@ -18,14 +18,12 @@
 // }
 
 // export default Home;
-import PostList from "../../util/PostList";
+// import PostList from "../../util/PostList";
 import "./home.css";
 
 const Home = () => {
   return (
-    <section
-      className="home w-[1100px] h-auto bg-[#d5e2f1] flex flex-col items-center justify-center mx-auto my-12"
-    >
+    <section className="home w-[1100px] h-auto bg-[#d5e2f1] flex flex-col items-center justify-center mx-auto my-12">
       <div className="home-hero-header text-center mb-8">
         <img
           src="/ctd.png"
@@ -48,13 +46,11 @@ const Home = () => {
           </p>
         </strong>
       </div>
-      <div className="w-full px-20 pb-8">
+      {/* <div className="w-full px-20 pb-8">
         <PostList />
-      </div>
+      </div> */}
     </section>
   );
 };
 
 export default Home;
-
-
