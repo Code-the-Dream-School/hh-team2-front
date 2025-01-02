@@ -15,7 +15,8 @@ const CreatePost = () => {
         { id: 'react', name: 'React' },
         { id: 'node', name: 'Node' },
         { id: 'python', name: 'Python' },
-        { id: 'ruby', name: 'Ruby' }
+        { id: 'ruby', name: 'Ruby' },
+        {id: 'general', name: 'General'}
     ]);
 
     const [loading, setLoading] = useState(false);
