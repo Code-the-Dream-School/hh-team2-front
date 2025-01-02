@@ -142,7 +142,7 @@ const CreatePost = () => {
                     Select a category
                 </option>
                 {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
+                    <option key={cat.id} value={cat.value}>
                         {cat.name}
                     </option>
                 ))}
