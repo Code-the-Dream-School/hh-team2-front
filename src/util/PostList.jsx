@@ -69,10 +69,11 @@
 
 // export default PostList;
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../redux/slices/postSlice";
 import PostCard from "./PostCard";
+import SearchBar from "./SearchBar";
 
 const PostList = () => {
   const dispatch = useDispatch();
@@ -81,9 +82,19 @@ const PostList = () => {
     (state) => state.posts
   );
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
   useEffect(() => {
     dispatch(fetchPosts({ page: currentPage }));
   }, [dispatch, currentPage]);
+
+  useEffect(() => {
+    const filtered = posts.filter((post) =>
+      post.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredPosts(filtered);
+  }, [searchTerm, posts]);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -118,9 +129,11 @@ const PostList = () => {
         />
       </div>
 
+      <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
         <div className="w-full max-w-lg space-y-6">
-          {posts.map((post) => (
+          {filteredPosts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
         </div>
