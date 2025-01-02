@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/apiCalls/authApiCall";
 
@@ -22,7 +21,7 @@ const Login = () => {
     }
 
     return ( 
-        <section className="flex justify-center items-center min-h-screen bg-blue-50">
+        <section className="flex justify-center items-center min-h-screen bg-custom-light-blue">
             <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
                 <h1 className="text-2xl font-semibold text-center mb-6 text-gray-700">Login to your account</h1>
                 <form onSubmit={formSubmitHandler}>
@@ -57,6 +56,14 @@ const Login = () => {
                         Login
                     </button>
                 </form>
+
+                {/* Signup Link */}
+                <div className="text-center mt-4">
+                    <p className="text-sm text-gray-600">
+                        Don't have an account? 
+                        <Link to="/register" className="text-blue-600 hover:text-blue-700 font-semibold">Signup</Link>
+                    </p>
+                </div>
             </div>
         </section>
     );
