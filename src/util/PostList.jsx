@@ -133,7 +133,7 @@ const PostList = () => {
 
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
         <div className="w-full max-w-lg space-y-6">
-          {posts.map((post) => (
+          {filteredPosts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
         </div>
