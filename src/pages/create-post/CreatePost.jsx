@@ -33,26 +33,6 @@ const CreatePost = () => {
             navigate("/login", { replace: true });
         }
 
-        const fetchCategories = async () => {
-            try {
-                const response = await axios.get(
-                    "http://localhost:8000/api/v1/categories",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem(
-                                "token"
-                            )}`,
-                        },
-                    }
-                );
-                setCategories(response.data);
-            } catch (err) {
-                console.error("Failed to fetch categories:", err);
-                setError("Failed to load categories. Please try again later.");
-            }
-        };
-
-        fetchCategories();
     }, [user, token, navigate]);
 
     const handleImageChange = (el) => {
