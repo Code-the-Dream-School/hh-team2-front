@@ -7,6 +7,17 @@ const CreatePost = () => {
     const [postContent, setPostContent] = useState("");
     const [images, setImages] = useState(null);
     const [title, setTitle] = useState("");
+    const [category, setCategory] = useState("");
+    
+
+    const [categories, setCategories] = useState([
+        { id: 'intro_to_programming', name: 'Intro to Programming' },
+        { id: 'react', name: 'React' },
+        { id: 'node', name: 'Node' },
+        { id: 'python', name: 'Python' },
+        { id: 'ruby', name: 'Ruby' },
+        {id: 'general', name: 'General'}
+    ]);
 
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -16,13 +27,12 @@ const CreatePost = () => {
     const { user, token } = useSelector((state) => state.auth);
 
     useEffect(() => {
-        
         if (!user && !token) {
             console.log("Redirecting because no user or token");
-         
+
             navigate("/login", { replace: true });
-            
-        } 
+        }
+
     }, [user, token, navigate]);
 
     const handleImageChange = (el) => {
@@ -51,6 +61,7 @@ const CreatePost = () => {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("content", postContent);
+        formData.append("category", category);
         if (images) {
             formData.append("image", images);
         }
@@ -75,6 +86,7 @@ const CreatePost = () => {
             setPostContent("");
             setImages(null);
             setTitle("");
+            setCategory("");
 
             navigate("/posts");
         } catch (error) {
@@ -101,6 +113,20 @@ const CreatePost = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full p-2 border rounded-md mb-4 mt-4 text-3xl font-serif text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
+            <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full p-2 border rounded-md mb-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+                <option value="" disabled>
+                    Select a category
+                </option>
+                {categories.map((cat) => (
+                    <option key={cat.id} value={cat.value}>
+                        {cat.name}
+                    </option>
+                ))}
+            </select>
             <textarea
                 className="w-full h-96 text-lg font-sans text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4 resize-none"
                 placeholder="Create your post"
