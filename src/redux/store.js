@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./slices/authSlice";
+import { postReducer } from "./slices/postSlice";
 
 const store = configureStore({
-    reducer: {
-        auth: authReducer, // we give the date 
-
-    }
+  reducer: {
+    auth: authReducer, // we give the date
+    posts: postReducer,
+  },
 });
 
 export default store;

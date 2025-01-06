@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch and useSelector
 import { authActions } from "../../redux/slices/authSlice"; // Import authActions from your slice
 import { toast } from "react-toastify"; // For showing toast messages
+import { HiOutlineUser, HiOutlineLogout } from "react-icons/hi"; // Import icons from react-icons
 
 const HeaderRight = () => {
   const [dropdown, setDropdown] = useState(false);
@@ -12,12 +13,15 @@ const HeaderRight = () => {
   const logout = () => {
     dispatch(authActions.logout()); // Dispatch logout action
     localStorage.removeItem("userinfo"); // Clear user data from localStorage
+    localStorage.removeItem("token");
     toast.success("Logged out successfully"); // Show success message
   };
 
   // Check if user and first_name exist in the user object
   const userFirstName = user?.first_name || "Guest"; // Default to "Guest" if no name
-  const userProfilePic = user?.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png"; // Fallback image
+  const userProfilePic =
+    user?.profile_picture ||
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png"; // Fallback image
 
   return (
     <div className="flex items-center space-x-4">
@@ -33,25 +37,34 @@ const HeaderRight = () => {
           <img
             src={userProfilePic}
             alt="Profile"
-            className="w-8 h-8 rounded-full cursor-pointer" // Image size and rounded corners
+            className="w-8 h-8 rounded-full cursor-pointer"
           />
-         
+
           {dropdown && (
-            <div className="absolute mt-2 bg-white shadow-lg rounded-md w-48 border border-gray-200 z-10">
-              <div
-                onClick={() => setDropdown(false)}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-300"
+            <div
+              className="absolute mt-2 bg-white shadow-lg rounded-md w-28 border border-gray-200 z-10"
+              style={{
+                top: "100%",
+                left: "-60px",
+                marginTop: "8px",
+              }}
+            >
+              {/* Profile link */}
+              <Link
+                to="/profile"
+                onClick={() => setDropdown(false)} // Close dropdown on link click
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-300 flex items-center space-x-2"
               >
-                <Link to="/profile" className="flex items-center space-x-2">
-                  <i className="bi bi-file-person"></i>
-                  <span>Profile</span>
-                </Link>
-              </div>
+                <HiOutlineUser className="w-5 h-5 text-gray-600" />
+                <span>Profile</span>
+              </Link>
+
+              {/* Logout link */}
               <div
                 onClick={logout}
-                className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-300"
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer transition duration-300 flex items-center space-x-2"
               >
-                <i className="bi bi-box-arrow-in-left"></i>
+                <HiOutlineLogout className="w-5 h-5 text-gray-600" />
                 <span>Logout</span>
               </div>
             </div>
