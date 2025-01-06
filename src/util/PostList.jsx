@@ -83,29 +83,26 @@ const PostList = () => {
   );
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [category, setCategory] = useState("");
+
+
 
   useEffect(() => {
-    dispatch(fetchPosts({ page: currentPage }));
-  }, [dispatch, currentPage]);
+    dispatch(fetchPosts({ page: currentPage, searchTerm, category }));
+  }, [dispatch, currentPage, searchTerm, category]);
 
-  useEffect(() => {
-    const filtered = posts.filter((post) =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredPosts(filtered);
-  }, [searchTerm, posts]);
+ 
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      dispatch(fetchPosts({ page: currentPage - 1 }));
+      dispatch(fetchPosts({ page: currentPage - 1, searchTerm, category }));
     }
   };
 
   const handleNextPage = () => {
     // console.log("page and totalPage", currentPage, totalPages);
     if (currentPage < totalPages) {
-      dispatch(fetchPosts({ page: currentPage + 1 }));
+      dispatch(fetchPosts({ page: currentPage + 1, searchTerm, category }));
     }
   };
 
@@ -130,6 +127,21 @@ const PostList = () => {
       </div>
 
       <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <div className="flex justify-center my-4">
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="p-2 border rounded-md"
+        >
+          <option value="">All Categories</option>
+          <option value="intro_to_programming">Intro to Programming</option>
+          <option value="react">React</option>
+          <option value="node">Node</option>
+          <option value="python">Python</option>
+          <option value="ruby">Ruby</option>
+          <option value="general">General</option>
+        </select>
+      </div>
 
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
         <div className="w-full max-w-lg space-y-6">
