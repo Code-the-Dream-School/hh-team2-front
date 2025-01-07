@@ -75,6 +75,7 @@ import { fetchPosts } from "../redux/slices/postSlice";
 import PostCard from "./PostCard";
 import SearchBar from "./SearchBar";
 
+
 const PostList = () => {
   const dispatch = useDispatch();
 
@@ -84,10 +85,26 @@ const PostList = () => {
 
   // for search
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 4;
 
+  const categories = [
+    { id: "intro_to_programming", name: "Intro to Programming" },
+    { id: "react", name: "React" },
+    { id: "node", name: "Node" },
+    { id: "python", name: "Python" },
+    { id: "ruby", name: "Ruby" },
+    { id: "general", name: "General" },
+  ];
+
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1); 
+  };
   // useEffect(() => {
   //   dispatch(fetchPosts({ page: currentPage }));
   // }, [dispatch, currentPage]);
@@ -95,13 +112,13 @@ const PostList = () => {
   // Fetch posts when search term or page changes
   useEffect(() => {
     dispatch(
-      fetchPosts({ search: searchTerm, page: currentPage, limit: postsPerPage })
+      fetchPosts({ search: searchTerm, page: currentPage, limit: postsPerPage, category: selectedCategory, })
     );
-  }, [currentSearchTerm, currentPage, dispatch]);
+  }, [currentSearchTerm, currentPage, selectedCategory,dispatch]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e);
-    // setCurrentPage(1); // Reset to the first page when searching
+    setCurrentPage(1); 
   };
 
   const handleClickSearch = () => {
@@ -113,7 +130,7 @@ const PostList = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      dispatch(fetchPosts({ page: currentPage - 1 }));
+      
     }
   };
 
@@ -121,7 +138,7 @@ const PostList = () => {
     console.log("page and totalPage", currentPage, totalPages);
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
-      dispatch(fetchPosts({ page: currentPage + 1 }));
+     
     }
   };
 
@@ -150,10 +167,23 @@ const PostList = () => {
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
         onClickSearch={handleClickSearch}
-      />
+      />  <div className="flex justify-center my-4">
+        <select
+    value={selectedCategory}
+    onChange={handleCategoryChange}
+    className="p-2 rounded-md border-2 border-indigo-600 focus:outline-none focus:border-blue-800"
+>
+    <option value="">All Categories</option>
+    {categories.map((cat) => (
+        <option key={cat.id} value={cat.id}>
+            {cat.name}
+        </option>
+    ))}
+</select>
+      </div>
       {/* <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
         <div className="w-full max-w-lg space-y-6">
-          {posts.map((post) => (
+          {filteredPosts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
         </div>
