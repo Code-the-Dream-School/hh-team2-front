@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FaThumbsUp, FaCommentDots } from "react-icons/fa";
 import React, { useState } from "react";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, onCategorySelect }) => {
   const [likes, setLikes] = useState(post.likes || 0); //number of likes
   const [liked, setLiked] = useState(false); //user likes or not
 
@@ -25,6 +25,12 @@ const PostCard = ({ post }) => {
           {post.title}
         </Link>
       </h2>
+    
+       
+<Link to="#" onClick={() => onCategorySelect(post.category)} className="text-indigo-600 hover:underline">
+  {post.category}
+</Link>
+
       <p className="text-gray-600 mb-2">{post.content.substring(0, 100)}...</p>
       <Link
         to={`/posts/${post._id}`}
