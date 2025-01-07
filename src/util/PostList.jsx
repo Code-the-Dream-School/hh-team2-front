@@ -75,6 +75,7 @@ import { fetchPosts } from "../redux/slices/postSlice";
 import PostCard from "./PostCard";
 import SearchBar from "./SearchBar";
 
+
 const PostList = () => {
     const dispatch = useDispatch();
 
@@ -82,48 +83,43 @@ const PostList = () => {
         (state) => state.posts
     );
 
-    // for search
+  // for search
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-    const [searchTerm, setSearchTerm] = useState("");
-    // const [currentSearchTerm, setCurrentSearchTerm] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
-    const [activeCategory, setActiveCategory] = useState("");
-    const [filteredPosts, setFilteredPosts] = useState(posts);
-    const postsPerPage = 4;
+  const [currentSearchTerm, setCurrentSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 4;
 
-    // useEffect(() => {
-    //   dispatch(fetchPosts({ page: currentPage }));
-    // }, [dispatch, currentPage]);
+  const categories = [
+    { id: "intro_to_programming", name: "Intro to Programming" },
+    { id: "react", name: "React" },
+    { id: "node", name: "Node" },
+    { id: "python", name: "Python" },
+    { id: "ruby", name: "Ruby" },
+    { id: "general", name: "General" },
+  ];
 
-    // Fetch posts when search term or page changes
-    useEffect(() => {
-        dispatch(
-            fetchPosts({
-                search: searchTerm,
-                page: currentPage,
-                limit: postsPerPage,
-            })
-        );
-    }, [searchTerm, currentPage, dispatch]);
 
-    useEffect(() => {
-        const filtered = posts.filter(
-            (post) =>
-                post.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-                (!activeCategory || post.category === activeCategory)
-        );
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1); 
+  };
+  // useEffect(() => {
+  //   dispatch(fetchPosts({ page: currentPage }));
+  // }, [dispatch, currentPage]);
 
-        setFilteredPosts(filtered); // Assuming there's a state called filteredPosts
-    }, [posts, activeCategory, searchTerm]);
+  // Fetch posts when search term or page changes
+  useEffect(() => {
+    dispatch(
+      fetchPosts({ search: searchTerm, page: currentPage, limit: postsPerPage, category: selectedCategory, })
+    );
+  }, [currentSearchTerm, currentPage, selectedCategory,dispatch]);
 
-    const handleCategoryFilter = (category) => {
-        setActiveCategory(category);
-    };
-
-    const handleSearchChange = (e) => {
-        setSearchTerm(e);
-        // setCurrentPage(1); // Reset to the first page when searching
-    };
+  const handleSearchChange = (e) => {
+    setSearchTerm(e);
+    setCurrentPage(1); 
+  };
 
     const handleClickSearch = () => {
         console.log("handle click :", searchTerm);
@@ -131,20 +127,20 @@ const PostList = () => {
         setCurrentPage(1); // Reset to the first page when searching
     };
 
-    const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-            dispatch(fetchPosts({ page: currentPage - 1 }));
-        }
-    };
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      
+    }
+  };
 
-    const handleNextPage = () => {
-        console.log("page and totalPage", currentPage, totalPages);
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-            dispatch(fetchPosts({ page: currentPage + 1 }));
-        }
-    };
+  const handleNextPage = () => {
+    console.log("page and totalPage", currentPage, totalPages);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+     
+    }
+  };
 
     if (loading) {
         return (
@@ -168,15 +164,28 @@ const PostList = () => {
                 />
             </div>
 
-            {/* Search Bar */}
-            <SearchBar
-                searchTerm={searchTerm}
-                onSearchChange={handleSearchChange}
-                onClickSearch={handleClickSearch}
-            />
-            {/* <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+      {/* Search Bar */}
+      <SearchBar
+        searchTerm={searchTerm}
+        onSearchChange={handleSearchChange}
+        onClickSearch={handleClickSearch}
+      />  <div className="flex justify-center my-4">
+        <select
+    value={selectedCategory}
+    onChange={handleCategoryChange}
+    className="p-2 rounded-md border-2 border-indigo-600 focus:outline-none focus:border-blue-800"
+>
+    <option value="">All Categories</option>
+    {categories.map((cat) => (
+        <option key={cat.id} value={cat.id}>
+            {cat.name}
+        </option>
+    ))}
+</select>
+      </div>
+      {/* <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
         <div className="w-full max-w-lg space-y-6">
-          {posts.map((post) => (
+          {filteredPosts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
         </div>
