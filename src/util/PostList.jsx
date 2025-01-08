@@ -32,8 +32,9 @@ const PostList = () => {
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
-    setCurrentPage(1); 
-  };
+    setCurrentPage(1);
+    
+};
   
 
   // Fetch posts when search term or page changes
