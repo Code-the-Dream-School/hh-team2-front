@@ -1,74 +1,3 @@
-// import PostCard from "./PostCard";
-
-// const posts = [
-//   {
-//     id: 1,
-//     title: "Title1",
-//     date: "Mar 22, 2023",
-//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-//     image: "https://via.placeholder.com/300",
-//     views: 15,
-//     comments: 2,
-//   },
-//   {
-//     id: 2,
-//     title: "Title2",
-//     date: "Mar 22, 2023",
-//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-//     image: "https://via.placeholder.com/300",
-//     views: 0,
-//     comments: 0,
-//   },
-//   {
-//     id: 3,
-//     title: "Title 3",
-//     date: "Mar 22, 2023",
-//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-//     image: "https://via.placeholder.com/300",
-//     views: 5,
-//     comments: 1,
-//   },
-//   {
-//     id: 4,
-//     title: "Title 4",
-//     date: "Mar 22, 2023",
-//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-//     image: "https://via.placeholder.com/300",
-//     views: 5,
-//     comments: 1,
-//   },
-//   {
-//     id: 5,
-//     title: "Title 5",
-//     date: "Mar 22, 2023",
-//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-//     image: "https://via.placeholder.com/300",
-//     views: 5,
-//     comments: 1,
-//   },
-//   {
-//     id: 6,
-//     title: "Title 6",
-//     date: "Mar 22, 2023",
-//     subtitle: "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and...",
-//     image: "https://via.placeholder.com/300",
-//     views: 5,
-//     comments: 1,
-//   },
-// ];
-
-// function PostList() {
-//   return (
-//     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-//       {posts.map(post => (
-//         <PostCard key={post.id} post={post} />
-//       ))}
-//     </div>
-//   );
-// }
-
-// export default PostList;
-
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../redux/slices/postSlice";
@@ -105,17 +34,16 @@ const PostList = () => {
     setSelectedCategory(e.target.value);
     setCurrentPage(1); 
   };
-  // useEffect(() => {
-  //   dispatch(fetchPosts({ page: currentPage }));
-  // }, [dispatch, currentPage]);
+  
 
   // Fetch posts when search term or page changes
   useEffect(() => {
     dispatch(
       fetchPosts({ search: searchTerm, page: currentPage, limit: postsPerPage, category: selectedCategory, })
     );
-  }, [currentSearchTerm, currentPage, selectedCategory,dispatch]);
+  }, [currentSearchTerm, currentPage, selectedCategory, dispatch]);
 
+  
   const handleSearchChange = (e) => {
     setSearchTerm(e);
     setCurrentPage(1); 
@@ -181,13 +109,7 @@ const PostList = () => {
     ))}
 </select>
       </div>
-      {/* <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-        <div className="w-full max-w-lg space-y-6">
-          {filteredPosts.map((post) => (
-            <PostCard key={post._id} post={post} />
-          ))}
-        </div>
-      </div> */}
+      
       {/* Post List */}
       {!loading && !error && (
         <div>
