@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUsers, setLoading, setError } from "../redux/usersActions";
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 
 const Messenger = () => {
     const [input, setInput] = useState("");
     const [recipient, setRecipient] = useState("");
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+    const addEmoji = (emoji) => {
+        setInput((prev) => prev + emoji.native);
+        setShowEmojiPicker(false); 
+    };
 
     const {
         list: users = [],
@@ -69,7 +77,7 @@ const Messenger = () => {
                         value={recipient}
                         onChange={(e) => setRecipient(e.target.value)}
                     >
-                        <option value="">-- Select a user --</option>
+                        <option value="">-- Select a recipient --</option>
                         {users
                             .filter((u) => u.username !== user.username)
                             .map((u) => (
@@ -83,20 +91,41 @@ const Messenger = () => {
                 {user ? (
                     <div className="flex flex-col">
                         <div className="flex h-64 mt-2 mb-5 space-x-2">
-                        <textarea
-    className="flex w-full p-2 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-    placeholder="Type a message..."
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    rows="4" 
-/>
-                        </div>
+                            <textarea
+                                className="flex w-full p-2 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Type a message..."
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                rows="4"
+                            /> </div>
+                            <div className="flex justify-between items-center space-x-4">
+                            <button
+                                className="px-4 py-3 w-1/2 text-blue-500 bg-white  border-gray-300 mb-5 rounded hover:bg-blue-600"
+                                onClick={() =>
+                                    setShowEmojiPicker(!showEmojiPicker)
+                                }
+                            >
+                                {showEmojiPicker
+                                    ? "Hide Emoji Picker"
+                                    : "Add Emoji"}
+                            </button>
+                            {showEmojiPicker && (
+                                <div className="absolute z-10">
+                                    <Picker
+                                        data={data}
+                                        onEmojiSelect={addEmoji}
+                                    />
+                                </div>
+                            )}
+                       
+
                         <button
-                            className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                            className="px-4 py-3 w-1/2 text-white bg-blue-500  border-gray-300 mb-5 rounded hover:bg-blue-800"
                             onClick={sendMessage}
                         >
                             Send
                         </button>
+                    </div>
                     </div>
                 ) : (
                     <p className="mt-4 text-center text-red-500">
