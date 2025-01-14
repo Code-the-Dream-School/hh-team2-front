@@ -19,6 +19,7 @@ const PostCard = ({ post, onCategorySelect }) => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
     fetchCommentsCount();
+    fetchLikesCount();
   }, []);
 
   const fetchComments = async () => {
@@ -39,6 +40,15 @@ const PostCard = ({ post, onCategorySelect }) => {
       setComments(response.data.comments || []);
     } catch (error) {
       console.error("Error fetching comments count.");
+    }
+  };
+
+  const fetchLikesCount = async() => {
+    try{
+      const response = await axios.get(`http://localhost:8000/api/v1/reactions/${post._id}/counts`);
+      setLikes(response.data.counts.like || 0);
+    }catch(error){
+      console.log("Error fetching likes count")
     }
   };
 
