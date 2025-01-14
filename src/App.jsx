@@ -141,11 +141,7 @@ const App = () => {
             />
             <Route
               path="/posts"
-              element={
-                <ProtectedRoute>
-                  <PostList />
-                </ProtectedRoute>
-              }
+              element={<PostList />}
             />
             <Route
               path="/posts/create-post"
