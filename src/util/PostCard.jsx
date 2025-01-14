@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { FaThumbsUp, FaCommentDots, FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
+import moment from "moment"; // date library
 
-const PostCard = ({ post, onCategorySelect }) => {
+const PostCard = ({ post }) => {
   const [likes, setLikes] = useState(post.likes || 0); // Number of likes
   const [liked, setLiked] = useState(false); // User likes or not
   const [comments, setComments] = useState([]); // List of comments
@@ -19,6 +19,7 @@ const PostCard = ({ post, onCategorySelect }) => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
     fetchCommentsCount();
+    fetchLikesCount();
   }, []);
 
   const fetchComments = async () => {
@@ -42,6 +43,15 @@ const PostCard = ({ post, onCategorySelect }) => {
     }
   };
 
+  const fetchLikesCount = async() => {
+    try{
+      const response = await axios.get(`http://localhost:8000/api/v1/reactions/${post._id}/counts`);
+      setLikes(response.data.counts.like || 0);
+    }catch(error){
+      console.log("Error fetching likes count");
+    }
+  };
+
   const handleToggleComments = () => {
     setShowComments((prev) => !prev);
     if (!showComments) {
@@ -59,18 +69,18 @@ const PostCard = ({ post, onCategorySelect }) => {
     setLoading(true);
     try {
       if (liked) {
-        const response = await axios.delete(`http://localhost:8000/api/v1/reactions/${post._id}`, {
+        await axios.delete(`http://localhost:8000/api/v1/reactions/${post._id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
-        setLikes(response.data.likes); // Update likes from backend
+        setLikes((prev) => prev - 1); // Update likes count locally
         setLiked(false);
       } else {
-        const response = await axios.post(
+        await axios.post(
           `http://localhost:8000/api/v1/reactions/${post._id}`,
           { reactionType: "like" },
           { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
-        setLikes(response.data.likes); // Update likes from backend
+        setLikes((prev) => prev + 1); // Update likes count locally
         setLiked(true);
       }
       setLoading(false);
@@ -155,6 +165,9 @@ const PostCard = ({ post, onCategorySelect }) => {
   // Toggle content display
   const toggleContent = () => setShowFullContent((prev) => !prev);
 
+
+
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
       {post.image && (
@@ -164,16 +177,18 @@ const PostCard = ({ post, onCategorySelect }) => {
           className="w-full h-48 object-cover rounded-md mb-4"
         />
       )}
-      <h2 className="text-xl font-semibold mb-2">
-        <Link
-          to={`/posts/${post._id}`}
-          className="hover:text-indigo-600"
-        >
-          {post.title}
-        </Link>
-      </h2>
-
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="text-xl font-semibold">{post.title}</h2>
+        <p className="text-sm text-gray-500" title={moment(post.createdAt).format('LL dddd, HH:mm')}>
+          {moment(post.createdAt).fromNow()}
+        </p>
+      </div>
+  
       <p className="text-gray-900 font-semi-bold mb-2">{post.category}</p>
+  
+  
+  
+    
 
       <p className="text-gray-600 mb-2">
         {showFullContent || post.content.length <= 100
