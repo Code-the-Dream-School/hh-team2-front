@@ -34,59 +34,82 @@ const App = () => {
         return isAuthenticated() ? children : <Navigate to="/login" replace />;
     };
 
-  return (
-    <Provider store={store}> {/* Wrap with Provider */}
-      <Router>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/login"
-              element={!user ? <Login /> : <Navigate to={"/"} />}
-            />
-            <Route
-              path="/register"
-              element={!user ? <Register /> : <Navigate to={"/"} />}
-            />
-            <Route
-              path="/posts"
-              element={<PostList />}
-            />
-            <Route
-              path="/posts/create-post"
-              element={
-                <ProtectedRoute>
-                  <CreatePost />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin-dashboard"
-              element={user?.isAdmin ? <AdminDashboard /> : <Navigate to={"/"} />}
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile/update"
-              element={
-                <ProtectedRoute>
-                  <UpdateProfile />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-          <Footer />
-        </div>
-      </Router>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            {" "}
+            {/* Wrap with Provider */}
+            <Router>
+                <div className="min-h-screen flex flex-col">
+                    <Header />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="/login"
+                            element={!user ? <Login /> : <Navigate to={"/"} />}
+                        />
+                        <Route
+                            path="/register"
+                            element={
+                                !user ? <Register /> : <Navigate to={"/"} />
+                            }
+                        />
+                        <Route
+                            path="/posts"
+                            element={
+                                <ProtectedRoute>
+                                    <PostList />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/posts/create-post"
+                            element={
+                                <ProtectedRoute>
+                                    <CreatePost />
+                                </ProtectedRoute>
+                            }
+                        />
+
+                        <Route
+                            path="/src/util/Messenger.jsx"
+                            element={
+                                <ProtectedRoute>
+                                    <Messenger />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin-dashboard"
+                            element={
+                                user?.isAdmin ? (
+                                    <AdminDashboard />
+                                ) : (
+                                    <Navigate to={"/"} />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoute>
+                                    <Profile />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/profile/update"
+                            element={
+                                <ProtectedRoute>
+                                    <UpdateProfile />
+                                </ProtectedRoute>
+                            }
+                        />
+                    </Routes>
+                    <Footer />
+                </div>
+            </Router>
+        </Provider>
+    );
 };
 
 export default App;
