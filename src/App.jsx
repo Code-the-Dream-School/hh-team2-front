@@ -161,9 +161,7 @@ const App = () => {
             {/* Posts Route */}
             <Route
               path="/posts"
-              element={
-                isAuthenticated() ? <PostList /> : <Navigate to="/login" />
-              }
+              element={<PostList />}
             />
             {/* Create Post Route */}
             <Route
