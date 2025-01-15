@@ -1,145 +1,142 @@
-import React, { useState, useEffect, useCallback, memo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import { setUsers, setLoading, setError } from "../redux/usersActions";
 import Picker from "@emoji-mart/react";
 import data from "@emoji-mart/data";
-import { selectFilteredUsers } from "../redux/usersSelectors";
 
-const Messenger = memo(() => {
-    const [input, setInput] = useState("");
-    const [recipient, setRecipient] = useState("");
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const [query, setQuery] = useState("");
-    const [debouncedQuery, setDebouncedQuery] = useState(query);
+const Messenger = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [message, setMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const dispatch = useDispatch();
-    const users = useSelector(selectFilteredUsers);
-    const user = useSelector((state) => state.auth?.user);
-    const { loading, error } = useSelector((state) => state.users || {});
+  useEffect(() => {
+    // Check if the user is logged in by checking for a token
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedQuery(query);
-        }, 300);
+  const addEmoji = (emoji) => {
+    setMessage((prev) => prev + emoji.native);
+    setShowEmojiPicker(false);
+  };
 
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [query]);
+  const fetchUsers = useCallback(async () => {
+    if (!searchTerm) return;
+    setLoading(true);
+    setError("");
 
-    const fetchUsers = useCallback(async () => {
-        try {
-            dispatch(setLoading(true));
-            const response = await axios.get(
-                `http://localhost:8000/api/v1/messages/search?query=${encodeURIComponent(debouncedQuery)}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                }
-            );
-            if (response.status !== 200) {
-                throw new Error("Failed to fetch users.");
-            }
-            dispatch(setUsers(response.data));
-        } catch (err) {
-            dispatch(setError(err.message));
-        } finally {
-            dispatch(setLoading(false));
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/v1/messages/search?query=${encodeURIComponent(searchTerm)}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
-    }, [debouncedQuery, dispatch]);
-
-    useEffect(() => {
-        if (debouncedQuery.length >= 1) {
-            fetchUsers();
-        }
-    }, [debouncedQuery, fetchUsers]);
-
-    const addEmoji = useCallback((emoji) => {
-        setInput((prev) => prev + emoji.native);
-        setShowEmojiPicker(false);
-    }, []);
-
-    const sendMessage = useCallback(() => {
-        if (input.trim() && recipient) {
-            console.log(`Message sent to ${recipient}: ${input}`);
-            setInput("");
-        }
-    }, [input, recipient]);
-
-    const handleSelectRecipient = (userId) => {
-        setRecipient(userId); // Set the selected recipient
-    };
-
-    if (loading) {
-        return <div className="text-center text-blue-500">Loading users...</div>;
+      );
+      setUsers(response.data || []);
+    } catch (err) {
+      setError("Error fetching users");
+    } finally {
+      setLoading(false);
     }
+  }, [searchTerm]);
 
-    if (error) {
-        return <div className="text-center text-red-500">Error: {error}</div>;
+  
+
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchUsers();
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm, fetchUsers]);
+
+  const handleSendMessage = () => {
+    if (!isLoggedIn) {
+      alert("Please log in to send messages.");
+      return;
     }
+    if (selectedUser && message.trim()) {
+      console.log(`Message sent to ${selectedUser}: ${message}`);
+      setMessage("");
+    } else {
+      alert("Please select a user and enter a message.");
+    }
+  };
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full h-96 max-w-md p-4 rounded shadow" style={{ backgroundColor: "#d5e2f1" }}>
-                <h1 className="mb-4 text-2xl font-bold text-center">Messenger</h1>
-                <input
-                    type="text"
-                    placeholder="Search by name or surname"
-                    className="w-full p-2 mb-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    onChange={(e) => setQuery(e.target.value)}
-                />
-                <div className="mb-4">
-                    {users.length > 0 && (
-                        <ul>
-                            {users.map((user) => (
-                                <li
-                                    key={user._id}
-                                    className="cursor-pointer text-blue-500"
-                                    onClick={() => handleSelectRecipient(user._id)} // Set recipient on click
-                                >
-                                    {user.first_name} {user.last_name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-                {user ? (
-                    <div className="flex flex-col">
-                        <textarea
-                            className="w-full p-2 mb-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Type a message..."
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            rows="4"
-                        />
-                        <div className="flex justify-between items-center space-x-4">
-                            <button
-                                className="px-4 py-3 w-1/2 text-blue-500 bg-white border-2 border-blue-500 mb-5 rounded hover:bg-blue-600"
-                                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                            >
-                                {showEmojiPicker ? "Hide Emoji Picker" : "Add Emoji"}
-                            </button>
-                            {showEmojiPicker && (
-                                <Picker data={data} onEmojiSelect={addEmoji} />
-                            )}
-                            <button
-                                className="px-4 py-3 w-1/2 text-white bg-blue-500 mb-5 rounded hover:bg-blue-800"
-                                onClick={sendMessage}
-                            >
-                                Send
-                            </button>
-                        </div>
-                    </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-md bg-white p-4 rounded shadow">
+        <h1 className="text-xl font-bold text-center mb-4">Messenger</h1>
+        {isLoggedIn ? (
+          <>
+            <input
+              type="text"
+              placeholder="Search users..."
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {loading ? (
+              <p className="text-blue-500 text-center">Loading users...</p>
+            ) : error ? (
+              <p className="text-red-500 text-center">{error}</p>
+            ) : (
+              <ul className="mb-4">
+                {users.length > 0 ? (
+                  users.map((user) => (
+                    <li
+                      key={user._id}
+                      className={`p-2 border-b cursor-pointer ${
+                        selectedUser === user._id ? "bg-blue-100" : ""
+                      }`}
+                      onClick={() => setSelectedUser(user._id)}
+                    >
+                      {user.first_name} {user.last_name}
+                    </li>
+                  ))
                 ) : (
-                    <p className="mt-4 text-center text-red-500">
-                        Please log in to send messages.
-                    </p>
+                  <p className="text-gray-500 text-center">No users found</p>
                 )}
+              </ul>
+            )}
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Type your message here..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows="4"
+            ></textarea>
+            <div className="flex items-center space-x-4 mt-4">
+              <button
+                className="flex-1 px-4 py-2 text-blue-500 bg-white border border-gray-300 rounded hover:bg-gray-100"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
+                {showEmojiPicker ? "Hide Emoji Picker" : "Add Emoji"}
+              </button>
+              <button
+                className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={handleSendMessage}
+              >
+                Send
+              </button>
             </div>
-        </div>
-    );
-});
+            {showEmojiPicker && (
+              <Picker data={data} onEmojiSelect={addEmoji} />
+            )}
+          </>
+        ) : (
+          <p className="text-center text-red-500">
+            Please log in to send messages.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default Messenger;
