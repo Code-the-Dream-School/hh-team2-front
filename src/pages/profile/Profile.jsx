@@ -1,13 +1,13 @@
 // import React from "react";
-// import { Link } from "react-router-dom"; 
+// import { Link } from "react-router-dom";
 
 // const Profile = () => {
 //   return (
 //     <div className="profile-page">
 //       <h1>Welcome to your Profile</h1>
-      
+
 //       <Link
-//         to="/profile/update" 
+//         to="/profile/update"
 //         className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
 //       >
 //         Update Profile
@@ -18,19 +18,23 @@
 
 // export default Profile;
 
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { getUserProfile, uploadProfilePhoto, updateProfile } from '../../redux/apiCalls/profileApiCall';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  getUserProfile,
+  uploadProfilePhoto,
+  updateProfile,
+} from "../../redux/apiCalls/profileApiCall";
+import { toast } from "react-toastify";
 const Profile = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { profile, isLoading, error } = useSelector((state) => state.profile);
   const [selectedFile, setSelectedFile] = useState(null);
   const [updatedData, setUpdatedData] = useState({
-    firstName: profile?.first_name || '',
-    bio: profile?.bio || '',
+    first_name: profile?.first_name || "",
+    bio: profile?.bio || "",
   });
   // Modal visibility state
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -51,23 +55,23 @@ const Profile = () => {
   // Handle profile photo upload
   const handleUpload = async () => {
     if (!selectedFile) {
-      toast.error('Please select a file to upload');
+      toast.error("Please select a file to upload");
       return;
     }
     const formData = new FormData();
-    formData.append('image', selectedFile); // Append the file to the form data
+    formData.append("image", selectedFile); // Append the file to the form data
     dispatch(uploadProfilePhoto(formData)); // Dispatch the uploadProfilePhoto action
   };
   // Handle profile update (like first name, bio)
   const handleUpdateProfile = (e) => {
     e.preventDefault();
-    if (!updatedData.firstName) {
+    if (!updatedData.first_name) {
       toast.error("First name is required.");
       return;
     }
     // Dispatch updateProfile action
     dispatch(updateProfile(id, updatedData));
-    setIsProfileModalOpen(false);  // Close the modal after update
+    setIsProfileModalOpen(false); // Close the modal after update
   };
   // Loading state
   if (isLoading) {
@@ -75,7 +79,9 @@ const Profile = () => {
   }
   // Error state
   if (error) {
-    return <div>There was an error loading the profile. Please try again later.</div>;
+    return (
+      <div>There was an error loading the profile. Please try again later.</div>
+    );
   }
   // No profile found
   if (!profile) {
@@ -88,7 +94,12 @@ const Profile = () => {
         {/* Profile Image Wrapper */}
         <div className="relative w-32 h-32 mx-auto mb-6">
           <img
-            src={selectedFile ? URL.createObjectURL(selectedFile) : profile?.profilePhoto?.url || 'https://via.placeholder.com/150'}
+            src={
+              selectedFile
+                ? URL.createObjectURL(selectedFile)
+                : profile?.profilePhoto?.url ||
+                  "https://via.placeholder.com/150"
+            }
             alt="Profile"
             className="rounded-full w-full h-full object-cover border-4 border-gray-200"
           />
@@ -98,7 +109,14 @@ const Profile = () => {
             className="absolute bottom-0 right-0 bg-gray-500 p-2 rounded-full cursor-pointer shadow-lg"
             title="Change profile picture"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 text-white"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -131,17 +149,22 @@ const Profile = () => {
         </div>
         {/* Display User Name */}
         <div className="text-center mb-4">
-          <h2 className="text-xl font-semibold mb-2">
-            {profile?.first_name}
-          </h2>
+          <h2 className="text-xl font-semibold mb-2">{profile?.first_name}</h2>
         </div>
         {/* Display Bio */}
         <div className="text-center mb-4 text-gray-600">
-          <p><strong>Bio:</strong> {profile?.bio || 'No bio available.'}</p>
+          <p>
+            <strong>Bio:</strong> {profile?.bio || "No bio available."}
+          </p>
         </div>
         {/* Display Member Since */}
         <div className="text-center mb-4 text-gray-500">
-          <p>Member since: {profile?.createdAt ? new Date(profile?.createdAt).toLocaleDateString() : 'N/A'}</p>
+          <p>
+            Member since:{" "}
+            {profile?.createdAt
+              ? new Date(profile?.createdAt).toLocaleDateString()
+              : "N/A"}
+          </p>
         </div>
         {/* Button to open the update profile modal */}
         <div className="text-center">
@@ -162,14 +185,21 @@ const Profile = () => {
                 <input
                   type="text"
                   placeholder="First Name"
-                  value={updatedData.firstName}
-                  onChange={(e) => setUpdatedData({ ...updatedData, firstName: e.target.value })}
+                  value={updatedData.first_name}
+                  onChange={(e) =>
+                    setUpdatedData({
+                      ...updatedData,
+                      first_name: e.target.value,
+                    })
+                  }
                   className="w-full p-2 border border-gray-300 rounded-md mb-2"
                 />
                 <textarea
                   placeholder="Bio"
                   value={updatedData.bio}
-                  onChange={(e) => setUpdatedData({ ...updatedData, bio: e.target.value })}
+                  onChange={(e) =>
+                    setUpdatedData({ ...updatedData, bio: e.target.value })
+                  }
                   className="w-full p-2 border border-gray-300 rounded-md mb-4"
                 />
                 <div className="flex justify-between">
@@ -219,6 +249,4 @@ const Profile = () => {
     </div>
   );
 };
-export default Profile;   
-
-
+export default Profile;
