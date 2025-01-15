@@ -32,16 +32,8 @@ const Messenger = () => {
 
         try {
             const response = await axios.get(
-                `http://localhost:8000/api/v1/messages/search?query=${encodeURIComponent(
-                    searchTerm
-                )}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            "token"
-                        )}`,
-                    },
-                }
+                `http://localhost:8000/api/v1/messages/search?query=${encodeURIComponent(searchTerm)}`,
+                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
             );
             setUsers(response.data || []);
         } catch (err) {
@@ -64,15 +56,15 @@ const Messenger = () => {
             alert("Please log in to send messages.");
             return;
         }
-        if (selectedUser && message.trim()) {
+        if (!selectedUser && !message.trim()) {
+            alert("Please select a user and enter a message.");
+            return;
+        }
             console.log(`Message sent to ${selectedUser}: ${message}`);
             setMessage("");
             setMessageSent(true);
             setTimeout(() => setMessageSent(false), 3000);
-        } else {
-            alert("Please select a user and enter a message.");
-        }
-    };
+        } 
 
     const handleUserSelection = (user) => {
         setSelectedUser(user._id);
