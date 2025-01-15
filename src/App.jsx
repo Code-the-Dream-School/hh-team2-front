@@ -107,7 +107,7 @@ import Register from "./pages/forms/Register";
 import PostsPage from "./pages/posts-page/postsPage";
 import CreatePost from "./pages/create-post/CreatePost";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-import UpdateProfile from "./pages/profile/UpdateProfile";
+// import UpdateProfile from "./pages/profile/UpdateProfile";
 import PostList from "./util/PostList.jsx";
 import PostCard from "./util/PostCard.jsx";
 import Footer from "./components/Footer/Footer";
@@ -131,49 +131,51 @@ const App = () => {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            {/* Login Route */}
             <Route
               path="/login"
-              element={!user ? <Login /> : <Navigate to={"/"} />}
+              element={!user ? <Login /> : <Navigate to={`/profile/${user._id}`} />}
             />
+            {/* Register Route */}
             <Route
               path="/register"
-              element={!user ? <Register /> : <Navigate to={"/"} />}
+              element={!user ? <Register /> : <Navigate to={`/profile/${user._id}`} />}
             />
+            {/* Dynamic Profile Route */}
+            <Route
+              path="/profile/:id"  // Dynamic route with user ID in the URL
+              element={isAuthenticated() ? <Profile /> : <Navigate to="/login" />} // Protect the profile route
+            />
+            {/* Default Profile Route - Redirect to user's profile */}
+            <Route
+              path="/profile"
+              element={user ? <Navigate to={`/profile/${user._id}`} /> : <Navigate to="/login" />}
+            />
+            {/* Profile Update Route */}
+            {/* <Route
+              path="/profile/update"
+              element={
+                isAuthenticated() ? <UpdateProfile /> : <Navigate to="/login" />
+              }
+            /> */}
+            {/* Posts Route */}
             <Route
               path="/posts"
               element={
-                <ProtectedRoute>
-                  <PostList />
-                </ProtectedRoute>
+                isAuthenticated() ? <PostList /> : <Navigate to="/login" />
               }
             />
+            {/* Create Post Route */}
             <Route
               path="/posts/create-post"
               element={
-                <ProtectedRoute>
-                  <CreatePost />
-                </ProtectedRoute>
+                isAuthenticated() ? <CreatePost /> : <Navigate to="/login" />
               }
             />
+            {/* Admin Dashboard Route */}
             <Route
               path="/admin-dashboard"
               element={user?.isAdmin ? <AdminDashboard /> : <Navigate to={"/"} />}
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile/update"
-              element={
-                <ProtectedRoute>
-                  <UpdateProfile />
-                </ProtectedRoute>
-              }
             />
           </Routes>
           <Footer />
@@ -182,5 +184,4 @@ const App = () => {
     </Provider>
   );
 };
-
 export default App;
