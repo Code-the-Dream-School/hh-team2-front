@@ -106,10 +106,14 @@ const HeaderRight = () => {
   const { user } = useSelector((state) => state.auth); // User data from auth slice
   const { profile } = useSelector((state) => state.profile); // Profile data from profile slice
   // Determine the correct profile picture URL
-  const userProfilePic = profile?.profilePhoto?.url || user?.profilePhoto || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png";
+  const userProfilePic =
+    profile?.profilePhoto?.url ||
+    user?.profilePhoto ||
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png";
+
   const logout = () => {
     dispatch(authActions.logout()); // Dispatch logout action
-    localStorage.removeItem("userInfo"); // Clear user data from localStorage
+    localStorage.removeItem("userinfo"); // Clear user data from localStorage
     localStorage.removeItem("token");
     toast.success("Logged out successfully"); // Show success message
   };
