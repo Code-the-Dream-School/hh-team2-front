@@ -91,6 +91,14 @@ const App = () => {
                 isAuthenticated() ? <CreatePost /> : <Navigate to="/login" />
               }
             />
+            <Route
+              path="/src/util/Messenger.jsx"
+              element={
+                <ProtectedRoute>
+                  <Messenger />
+                </ProtectedRoute>
+              }
+            />
             {/* Admin Dashboard Route */}
             <Route
               path="/admin-dashboard"
