@@ -32,8 +32,16 @@ const Messenger = () => {
 
         try {
             const response = await axios.get(
-                `http://localhost:8000/api/v1/messages/search?query=${encodeURIComponent(searchTerm)}`,
-                { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+                `http://localhost:8000/api/v1/messages/search?query=${encodeURIComponent(
+                    searchTerm
+                )}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                        )}`,
+                    },
+                }
             );
             setUsers(response.data || []);
         } catch (err) {
@@ -49,28 +57,34 @@ const Messenger = () => {
         }, 300);
 
         return () => clearTimeout(delayDebounce);
-    }, [searchTerm, fetchUsers]);
+    }, [searchTerm, fetchUsers]); 
+    
+    const handleUserSelection = (user) => {
+        setSelectedUser(user._id);
+        setSelectedUserInfo(`${user.first_name} ${user.last_name}`);
+        setSearchTerm(`${user.first_name} ${user.last_name}`);
+    };
 
     const handleSendMessage = () => {
         if (!isLoggedIn) {
             alert("Please log in to send messages.");
             return;
         }
-        if (!selectedUser && !message.trim()) {
+        if (!selectedUser || !message.trim()) {
             alert("Please select a user and enter a message.");
             return;
         }
-            console.log(`Message sent to ${selectedUser}: ${message}`);
-            setMessage("");
-            setMessageSent(true);
-            setTimeout(() => setMessageSent(false), 3000);
-        } 
-
-    const handleUserSelection = (user) => {
-        setSelectedUser(user._id);
-        setSelectedUserInfo(`${user.first_name} ${user.last_name}`);
-        setSearchTerm(`${user.first_name} ${user.last_name}`);
+        console.log(`Message sent to ${selectedUser}: ${message}`);
+        setMessage("");
+        setSelectedUserInfo("");
+        setSelectedUser(null);
+        setSearchTerm("");
+        setMessageSent(true);
+        
+        setTimeout(() => setMessageSent(false), 3000);
     };
+
+   
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -140,7 +154,6 @@ const Messenger = () => {
                             <button
                                 className="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                                 onClick={handleSendMessage}
-                                disabled={!selectedUser || !message.trim()}
                             >
                                 Send
                             </button>
