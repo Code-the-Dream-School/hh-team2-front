@@ -43,6 +43,9 @@ const Navbar = ({ toggle, setToggle }) => {
           </Link>
           )
         }
+
+{/* Messendger */}
+        <Link to="/src/util/Messenger.jsx" className="nav-link">Messenger</Link>
        
 
         {/* Admin Dashboard Link */}
