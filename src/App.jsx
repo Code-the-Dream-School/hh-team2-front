@@ -1,3 +1,4 @@
+
 // import React, { useState, useEffect } from "react";
 // // import { getAllData } from './util/index';
 // import {
@@ -175,8 +176,14 @@
 // export default App;
 
 
+
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store"; // Import your store
 import Header from "./components/header/Header"; // New Header
@@ -188,11 +195,13 @@ import Register from "./pages/forms/Register";
 import PostsPage from "./pages/posts-page/postsPage";
 import CreatePost from "./pages/create-post/CreatePost";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-import UpdateProfile from "./pages/profile/UpdateProfile";
 import PostList from "./util/PostList.jsx";
 import PostCard from "./util/PostCard.jsx";
 import Footer from "./components/Footer/Footer";
 import { useSelector } from "react-redux";
+import Messenger from "./util/Messenger.jsx"; // Import Messenger
+
+const URL = "http://localhost:8000/api/v1/";
 
 const App = () => {
   const { user } = useSelector((state) => state.auth);
@@ -200,8 +209,13 @@ const App = () => {
   // Check if user is authenticated (exists in localStorage) or if user data is available in Redux
   const isAuthenticated = () => !!user || !!localStorage.getItem("token");
 
+  const ProtectedRoute = ({ children }) => {
+    return isAuthenticated() ? children : <Navigate to="/login" replace />;
+  };
+
   return (
-    <Provider store={store}> {/* Wrap with Provider */}
+    <Provider store={store}>
+      {/* Wrap with Provider */}
       <Router>
         <div className="min-h-screen flex flex-col">
           <Header />
@@ -211,7 +225,7 @@ const App = () => {
             {/* Login Route */}
             <Route
               path="/login"
-              element={user ? <Navigate to="/" /> : <Login />}
+              element={user ? <Navigate to={`/profile/${user._id}`} /> : <Login />}
             />
 
             {/* Register Route */}
@@ -219,16 +233,13 @@ const App = () => {
               path="/register"
               element={!user ? <Register /> : <Navigate to={`/profile/${user._id}`} />}
             />
-
+            
             {/* Dynamic Profile Route */}
-            {/* <Route
-              path="/profile/:id"  // Dynamic route with user ID in the URL
-              element={isAuthenticated() ? <Profile /> : <Navigate to="/login" />} // Protect the profile route
-            /> */}
+            <Route
+              path="/profile/:id" // Dynamic route with user ID in the URL
+              element={isAuthenticated() ? <Profile /> : <Navigate to="/login" />}
+            />
 
-<Route path="/profile/:id" element={<Profile />} />
-            
-            
             {/* Default Profile Route - Redirect to user's profile */}
             <Route
               path="/profile"
@@ -236,33 +247,37 @@ const App = () => {
             />
 
             {/* Profile Update Route */}
-            <Route
+            {/* <Route
               path="/profile/update"
               element={
                 isAuthenticated() ? <UpdateProfile /> : <Navigate to="/login" />
               }
-            />
+            /> */}
 
             {/* Posts Route */}
             <Route
               path="/posts"
-              element={
-                isAuthenticated() ? <PostList /> : <Navigate to="/login" />
-              }
+              element={isAuthenticated() ? <PostList /> : <Navigate to="/login" />}
             />
 
             {/* Create Post Route */}
             <Route
               path="/posts/create-post"
-              element={
-                isAuthenticated() ? <CreatePost /> : <Navigate to="/login" />
-              }
+              element={isAuthenticated() ? <CreatePost /> : <Navigate to="/login" />}
             />
 
             {/* Admin Dashboard Route */}
             <Route
               path="/admin-dashboard"
               element={user?.isAdmin ? <AdminDashboard /> : <Navigate to={"/"} />}
+            />
+
+            {/* Messenger Route */}
+            <Route
+              path="/src/util/Messenger.jsx"
+              element={
+                isAuthenticated() ? <Messenger /> : <Navigate to="/login" />
+              }
             />
           </Routes>
           <Footer />

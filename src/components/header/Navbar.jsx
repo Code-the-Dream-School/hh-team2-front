@@ -61,6 +61,69 @@
 // };
 
 // export default Navbar;
+// import { Link } from "react-router-dom";
+// import { useSelector } from "react-redux";
+
+// const Navbar = ({ toggle, setToggle }) => {
+
+//   const { user } = useSelector((state) => state.auth);
+
+//   return (
+//     <nav
+//       style={{
+//         clipPath: toggle ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)" : "none",
+//       }}
+//       className="navbar flex-grow flex justify-center"
+//     >
+//       <ul className="nav-links flex space-x-6">
+//         {/* Home Link */}
+//         <Link
+//           to="/"
+//           onClick={() => setToggle(false)}  
+//           className="nav-link"
+//         >
+//           Home
+//         </Link>
+
+//         {/* Posts Link */}
+//         <Link
+//           to="/posts"
+//           onClick={() => setToggle(false)} 
+//           className="nav-link"
+//         >
+//           Posts
+//         </Link>
+
+//         {/* Create Post Link */}
+//         {
+//           user &&(
+//             <Link
+//             to="/posts/create-post"
+//             onClick={() => setToggle(false)}  
+//             className="nav-link"
+//           >
+//             Create
+//           </Link>
+//           )
+//         }
+       
+
+//         {/* Admin Dashboard Link */}
+//         {user && user.isAdmin && (
+//           <Link
+//             to="/admin-dashboard"
+//             onClick={() => setToggle(false)}  
+//             className="nav-link"
+//           >
+//             Admin Dashboard
+//           </Link>
+//         )}
+//       </ul>
+//     </nav>
+//   );
+// };
+
+// export default Navbar;
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -95,11 +158,11 @@ const Navbar = ({ toggle, setToggle }) => {
         </div>
       )}
 
-      {/* Nav Links */}
+      {/* Nav Links - Always visible on larger screens */}
       <ul
         className={`flex sm:space-x-0.5 flex-col sm:flex-row sm:justify-center ${
           toggle ? "block" : "hidden"
-        }`}
+        } sm:flex`}
       >
         <Link
           to="/"
@@ -117,6 +180,7 @@ const Navbar = ({ toggle, setToggle }) => {
           Posts
         </Link>
 
+        {/* Create Post Link (Only for logged-in users) */}
         {user && (
           <Link
             to="/posts/create-post"
@@ -127,6 +191,15 @@ const Navbar = ({ toggle, setToggle }) => {
           </Link>
         )}
 
+        {/* Messenger Link */}
+        <Link
+          to="/src/util/Messenger.jsx"
+          className="px-4 py-2 text-gray-700 hover:text-[#e67e08] transition duration-300"
+        >
+          Messenger
+        </Link>
+
+        {/* Admin Dashboard Link (Only for Admin users) */}
         {user && user.isAdmin && (
           <Link
             to="/admin-dashboard"
@@ -142,3 +215,5 @@ const Navbar = ({ toggle, setToggle }) => {
 };
 
 export default Navbar;
+
+

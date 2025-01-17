@@ -1,7 +1,6 @@
 import { authActions } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import request from "../../utils/request";
-
 // Function to login the user
 export function loginUser(user) {
   return async (dispatch) => {
@@ -17,8 +16,6 @@ export function loginUser(user) {
   };
 }
 
-
-
 // Register User
 // export function registerUser(user) {
 //   return async (dispatch) => {
@@ -30,7 +27,6 @@ export function loginUser(user) {
 //     }
 //   }
 // }
-
 export function registerUser(user) {
   return async (dispatch) => {
     try {
@@ -55,7 +51,6 @@ export function registerUser(user) {
     }
   };
 }
-
 // #Mohammed
 // // Logout User
 // export function logoutUser() {

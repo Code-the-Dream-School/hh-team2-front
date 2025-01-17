@@ -1,79 +1,44 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Define the initial state of the profile slice
+const initialState = {
+  profile: null, // Stores the entire user profile
+  isLoading: false, // Loading state
+  error: null, // Error state for any failed requests
+};
 
 const profileSlice = createSlice({
-    name: "profile", 
-    initialState: {
-      profile: null,
-      
+  name: "profile",
+  initialState,
+  reducers: {
+    // Set the entire profile
+    setProfile(state, action) {
+      state.profile = action.payload; // Store the profile data
+      state.isLoading = false; // Set loading to false after profile is fetched or updated
     },
-    reducers: {
-      setProfile(state,action) {
-        state.profile = action.payload;
-
-      },
-      setProfilePhoto(state,action) {
-        state.profile.profilePhoto = action.payload;
-
+    
+    // Set the loading state to true when a request is in progress
+    setLoading(state) {
+      state.isLoading = true;
+    },
+    
+    // Set an error message if a request fails
+    setError(state, action) {
+      state.error = action.payload; // Store the error message
+      state.isLoading = false; // Stop the loading state
+    },
+    
+    // Update the profile photo in the profile object
+    setProfilePhoto(state, action) {
+      if (state.profile) {
+        state.profile.profilePhoto = action.payload; // Update the profile photo
       }
-       
-        },
+    },
+  },
 });
 
 const profileReducer = profileSlice.reducer;
-const profileActions = profileSlice.actions;
 
-export { profileActions, profileReducer}
-
-// profileSlice.js
-// import { createSlice } from '@reduxjs/toolkit';
-
-// const profileSlice = createSlice({
-//   name: 'profile',
-//   initialState: {
-//     first_name: '',
-//     last_name: '',
-//     profilePhoto: null,
-//   },
-//   reducers: {
-//     setProfile(state, action) {
-//       state.first_name = action.payload.first_name;
-//       state.last_name = action.payload.last_name;
-//       state.profilePhoto = action.payload.profilePhoto;
-//     },
-//   },
-// });
-
-// export const profileActions = profileSlice.actions;
-// export const profileReducer = profileSlice.reducer;
-
-// import { createSlice } from '@reduxjs/toolkit';
-
-// const initialState = {
-//   profile: null,
-//   isLoading: false,
-//   error: null,
-// };
-
-// const profileSlice = createSlice({
-//   name: 'profile',
-//   initialState,
-//   reducers: {
-//     setProfile(state, action) {
-//       state.profile = action.payload;
-//       state.isLoading = false;  // Profile has been fetched
-//     },
-//     setLoading(state) {
-//       state.isLoading = true;  // Set loading state when requesting
-//     },
-//     setError(state, action) {
-//       state.error = action.payload;
-//       state.isLoading = false;  // Stop loading when error occurs
-//     },
-//   },
-// });
-
-// export const { setProfile, setLoading, setError } = profileSlice.actions;
-
-// export default profileSlice.reducer;
-
+// Export actions to dispatch in components or other parts of the app
+export const profileActions = profileSlice.actions;
+export default profileReducer;
