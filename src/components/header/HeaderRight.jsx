@@ -4,25 +4,21 @@
 // import { authActions } from "../../redux/slices/authSlice"; // Import authActions from your slice
 // import { toast } from "react-toastify"; // For showing toast messages
 // import { HiOutlineUser, HiOutlineLogout } from "react-icons/hi"; // Import icons from react-icons
-
 // const HeaderRight = () => {
 //   const [dropdown, setDropdown] = useState(false);
 //   const dispatch = useDispatch();
 //   const { user } = useSelector((state) => state.auth); // Get user from Redux store
-
 //   const logout = () => {
 //     dispatch(authActions.logout()); // Dispatch logout action
 //     localStorage.removeItem("userinfo"); // Clear user data from localStorage
 //     localStorage.removeItem("token");
 //     toast.success("Logged out successfully"); // Show success message
 //   };
-
 //   // Check if user and first_name exist in the user object
 //   const userFirstName = user?.first_name || "Guest"; // Default to "Guest" if no name
 //   const userProfilePic =
 //     user?.profile_picture ||
 //     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png"; // Fallback image
-
 //   return (
 //     <div className="flex items-center space-x-4">
 //       {user ? (
@@ -30,7 +26,7 @@
 //           {/* User's first name and profile picture */}
 //           <span
 //             onClick={() => setDropdown(!dropdown)}
-//             className="cursor-pointer text-sm font-semibold text-gray-700 hover:text-[#e67e08]"
+//             className="cursor-pointer text-sm font-semibold text-gray-700 hover:text-[#E67E08]"
 //           >
 //             {userFirstName} {/* Display the user's first name */}
 //           </span>
@@ -39,7 +35,6 @@
 //             alt="Profile"
 //             className="w-8 h-8 rounded-full cursor-pointer"
 //           />
-
 //           {dropdown && (
 //             <div
 //               className="absolute mt-2 bg-white shadow-lg rounded-md w-28 border border-gray-200 z-10"
@@ -58,7 +53,6 @@
 //                 <HiOutlineUser className="w-5 h-5 text-gray-600" />
 //                 <span>Profile</span>
 //               </Link>
-
 //               {/* Logout link */}
 //               <div
 //                 onClick={logout}
@@ -75,13 +69,13 @@
 //         <div className="flex space-x-2">
 //           <Link
 //             to="/login"
-//             className="px-3 py-1 bg-[#002046] text-white rounded hover:bg-[#e67e08] transition duration-300"
+//             className="px-3 py-1 bg-[#002046] text-white rounded hover:bg-[#E67E08] transition duration-300"
 //           >
 //             Login
 //           </Link>
 //           <Link
 //             to="/register"
-//             className="px-3 py-1 bg-[#d5e2f1] text-black rounded hover:bg-[#e67e08] transition duration-300"
+//             className="px-3 py-1 bg-[#D5E2F1] text-black rounded hover:bg-[#E67E08] transition duration-300"
 //           >
 //             Register
 //           </Link>
@@ -90,35 +84,32 @@
 //     </div>
 //   );
 // };
-
 // export default HeaderRight;
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch and useSelector
 import { authActions } from "../../redux/slices/authSlice"; // Import authActions from your slice
 import { toast } from "react-toastify"; // For showing toast messages
 import { HiOutlineUser, HiOutlineLogout } from "react-icons/hi"; // Import icons from react-icons
-
 const HeaderRight = () => {
   const [dropdown, setDropdown] = useState(false);
   const dispatch = useDispatch();
-
   // Get profile and user data from Redux store
   const { user } = useSelector((state) => state.auth); // User data from auth slice
-  const { name, picture } = useSelector((state) => state.profile); // Profile data from profile slice
-
+  const { profile } = useSelector((state) => state.profile); // Profile data from profile slice
+  // Determine the correct profile picture URL
+  const userProfilePic =
+    profile?.profilePhoto?.url ||
+    user?.profilePhoto ||
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png";
   const logout = () => {
     dispatch(authActions.logout()); // Dispatch logout action
     localStorage.removeItem("userinfo"); // Clear user data from localStorage
     localStorage.removeItem("token");
     toast.success("Logged out successfully"); // Show success message
   };
-
-  // Check if user and first_name exist in the user object
-  const userFirstName = name || user?.first_name || "Guest"; // Default to "Guest" if no name
-  const userProfilePic = picture || user?.profile_picture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973461_640.png"; // Fallback image
-
+  // Check if profile data exists, otherwise use fallback
+  const userFirstName = profile?.first_name || user?.first_name || "Guest"; // Default to "Guest" if no name
   return (
     <div className="flex items-center space-x-4">
       {user ? (
@@ -126,7 +117,7 @@ const HeaderRight = () => {
           {/* User's first name and profile picture */}
           <span
             onClick={() => setDropdown(!dropdown)}
-            className="cursor-pointer text-sm font-semibold text-gray-700 hover:text-[#e67e08]"
+            className="cursor-pointer text-sm font-semibold text-gray-700 hover:text-[#E67E08]"
           >
             {userFirstName} {/* Display the user's first name */}
           </span>
@@ -135,7 +126,6 @@ const HeaderRight = () => {
             alt="Profile"
             className="w-8 h-8 rounded-full cursor-pointer"
           />
-
           {dropdown && (
             <div
               className="absolute mt-2 bg-white shadow-lg rounded-md w-28 border border-gray-200 z-10"
@@ -154,7 +144,6 @@ const HeaderRight = () => {
                 <HiOutlineUser className="w-5 h-5 text-gray-600" />
                 <span>Profile</span>
               </Link>
-
               {/* Logout link */}
               <div
                 onClick={logout}
@@ -171,13 +160,13 @@ const HeaderRight = () => {
         <div className="flex space-x-2">
           <Link
             to="/login"
-            className="px-3 py-1 bg-[#002046] text-white rounded hover:bg-[#e67e08] transition duration-300"
+            className="px-3 py-1 bg-[#002046] text-white rounded hover:bg-[#E67E08] transition duration-300"
           >
             Login
           </Link>
           <Link
             to="/register"
-            className="px-3 py-1 bg-[#d5e2f1] text-black rounded hover:bg-[#e67e08] transition duration-300"
+            className="px-3 py-1 bg-[#D5E2F1] text-black rounded hover:bg-[#E67E08] transition duration-300"
           >
             Register
           </Link>
@@ -186,5 +175,4 @@ const HeaderRight = () => {
     </div>
   );
 };
-
 export default HeaderRight;
