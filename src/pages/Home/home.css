@@ -1,21 +1,5 @@
 /* home.css */
-.home-hero-header-layout {
-    margin-top: 10px; 
-    /* justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20 30px; */
- }
-  
-  .home-title {
-    color: #082444; /* Customize the title color */
-  }
-  
-  .home {
-    /* background-color: rgb(232, 197, 132); */
-    background-color: transparent;
-    /* width: auto; */
-  }
+
 
 /* .intro_message {
   text-align: center;

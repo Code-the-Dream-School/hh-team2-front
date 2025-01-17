@@ -18,8 +18,8 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.js',
   },
-  server: {
-    host: 'localhost', // Optional, to specify the host
-    port: 3000, // Set the port to 3000
-  },
+  // server: {
+  //   host: 'localhost', // Optional, to specify the host
+  //   port: 3000, // Set the port to 3000
+  // },
 });
