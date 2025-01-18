@@ -1,19 +1,3 @@
-// import React from "react";
-// import { Link } from "react-router-dom";
-// const Profile = () => {
-//   return (
-//     <div className="profile-page">
-//       <h1>Welcome to your Profile</h1>
-//       <Link
-//         to="/profile/update"
-//         className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
-//       >
-//         Update Profile
-//       </Link>
-//     </div>
-//   );
-// };
-// export default Profile;
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -23,10 +7,12 @@ import {
   updateProfile,
 } from "../../redux/apiCalls/profileApiCall";
 import { toast } from "react-toastify";
+
 const Profile = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { profile, isLoading, error } = useSelector((state) => state.profile);
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [updatedData, setUpdatedData] = useState({
     first_name: profile?.first_name || "",
@@ -35,12 +21,14 @@ const Profile = () => {
   // Modal visibility state
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
   // Fetch the profile when the component mounts
   useEffect(() => {
     if (id) {
       dispatch(getUserProfile(id));
     }
   }, [id, dispatch]);
+
   // Handle file change for profile photo upload
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -48,6 +36,7 @@ const Profile = () => {
       setSelectedFile(file); // Store the selected file
     }
   };
+
   // Handle profile photo upload
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -58,6 +47,7 @@ const Profile = () => {
     formData.append("image", selectedFile); // Append the file to the form data
     dispatch(uploadProfilePhoto(formData)); // Dispatch the uploadProfilePhoto action
   };
+
   // Handle profile update (like first name, bio)
   const handleUpdateProfile = (e) => {
     e.preventDefault();
@@ -69,24 +59,29 @@ const Profile = () => {
     dispatch(updateProfile(id, updatedData));
     setIsProfileModalOpen(false); // Close the modal after update
   };
+
   // Loading state
   if (isLoading) {
     return <div>Loading profile...</div>;
   }
+
   // Error state
   if (error) {
     return (
       <div>There was an error loading the profile. Please try again later.</div>
     );
   }
+
   // No profile found
   if (!profile) {
     return <div>Profile not found.</div>;
   }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="p-6 bg-white max-w-md w-full mx-auto rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-center mb-6">Your Profile</h1>
+
         {/* Profile Image Wrapper */}
         <div className="relative w-32 h-32 mx-auto mb-6">
           <img
@@ -134,6 +129,7 @@ const Profile = () => {
             onChange={handleFileChange}
           />
         </div>
+
         {/* Upload Button */}
         <div className="flex justify-center gap-2">
           <button
@@ -143,6 +139,7 @@ const Profile = () => {
             Upload
           </button>
         </div>
+
         {/* Display User Name */}
         <div className="text-center mb-4">
           <h2 className="text-xl font-semibold mb-2">{profile?.first_name}</h2>
@@ -162,6 +159,7 @@ const Profile = () => {
               : "N/A"}
           </p>
         </div>
+
         {/* Button to open the update profile modal */}
         <div className="text-center">
           <button
@@ -171,6 +169,7 @@ const Profile = () => {
             Update Profile
           </button>
         </div>
+
         {/* Modal for updating profile */}
         {isProfileModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -224,6 +223,7 @@ const Profile = () => {
             </div>
           </div>
         )}
+
         {/* Modal for updating password */}
         {isPasswordModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -245,6 +245,5 @@ const Profile = () => {
     </div>
   );
 };
+
 export default Profile;
-
-

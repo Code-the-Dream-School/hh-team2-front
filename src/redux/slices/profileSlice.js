@@ -1,36 +1,44 @@
-// src/redux/slices/profileSlice.js
-// import { createSlice } from '@reduxjs/toolkit';
-// const initialState = {
-//   name: "John Doe",
-//   picture: "https://via.placeholder.com/150",
-// };
-// const profileSlice = createSlice({
-//   name: 'profile',
-//   initialState,
-//   reducers: {
-//     setProfile: (state, action) => {
-//       state.name = action.payload.name;
-//       state.picture = action.payload.picture;
-//     },
-//   },
-// });
-// export const { setProfile } = profileSlice.actions;
-// export default profileSlice.reducer;
 import { createSlice } from "@reduxjs/toolkit";
+
+// Define the initial state of the profile slice
+const initialState = {
+  profile: null, // Stores the entire user profile
+  isLoading: false, // Loading state
+  error: null, // Error state for any failed requests
+};
+
 const profileSlice = createSlice({
-    name: "profile",
-    initialState: {
-      profile: null,
+  name: "profile",
+  initialState,
+  reducers: {
+    // Set the entire profile
+    setProfile(state, action) {
+      state.profile = action.payload; // Store the profile data
+      state.isLoading = false; // Set loading to false after profile is fetched or updated
     },
-    reducers: {
-      setProfile(state,action) {
-        state.profile = action.payload;
-      },
-      setProfilePhoto(state,action) {
-        state.profile.profilePhoto = action.payload;
+    
+    // Set the loading state to true when a request is in progress
+    setLoading(state) {
+      state.isLoading = true;
+    },
+    
+    // Set an error message if a request fails
+    setError(state, action) {
+      state.error = action.payload; // Store the error message
+      state.isLoading = false; // Stop the loading state
+    },
+    
+    // Update the profile photo in the profile object
+    setProfilePhoto(state, action) {
+      if (state.profile) {
+        state.profile.profilePhoto = action.payload; // Update the profile photo
       }
-        },
+    },
+  },
 });
+
 const profileReducer = profileSlice.reducer;
+
+// Export actions to dispatch in components or other parts of the app
 export const profileActions = profileSlice.actions;
 export default profileReducer;

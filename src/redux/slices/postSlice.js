@@ -1,3 +1,4 @@
+// src/slices/postSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -20,13 +21,32 @@ const postSlice = createSlice({
   name: "posts",
   initialState: {
     posts: [],
+    singlePost: null,
+    createPostError: null,
     totalPosts: 0,
     currentPage: 1,
     totalPages: 1,
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setPosts(state, action) {
+      state.posts = action.payload.posts;
+    },
+    setSinglePost(state, action) {
+      state.singlePost = action.payload;
+    },
+    createPostSuccess(state, action) {
+      state.posts.unshift(action.payload); // Add the new post to the beginning
+      state.createPostError = null;
+    },
+    createPostFailure(state, action) {
+      state.createPostError = action.payload;
+    },
+    setLoading(state, action) {
+      state.loading = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state) => {
@@ -39,7 +59,6 @@ const postSlice = createSlice({
         state.totalPosts = action.payload.total;
         state.currentPage = Number(action.payload.page);
         state.totalPages = action.payload.pages;
-        // console.log("action payload", action.payload);
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.loading = false;
@@ -52,4 +71,3 @@ const postReducer = postSlice.reducer;
 const postActions = postSlice.actions;
 
 export { postActions, postReducer };
-// export default postSlice.reducer;
