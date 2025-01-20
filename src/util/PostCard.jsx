@@ -165,16 +165,13 @@ const PostCard = ({ post }) => {
   // Toggle content display
   const toggleContent = () => setShowFullContent((prev) => !prev);
 
-
-
-
   return (
     <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
       {post.image && (
         <img
           src={post.image}
           alt={post.title}
-          className="w-full h-48 object-cover rounded-md mb-4"
+          className="w-full h-40 object-cover rounded-md mb-4"
         />
       )}
       <div className="flex justify-between items-center mb-2">
@@ -184,12 +181,9 @@ const PostCard = ({ post }) => {
         </p>
       </div>
   
-      <p className="text-gray-900 font-semi-bold mb-2">{post.category}</p>
+      {/* Category with Orange Color */}
+      <p className="text-orange-500 font-semibold mb-2">{post.category}</p>
   
-  
-  
-    
-
       <p className="text-gray-600 mb-2">
         {showFullContent || post.content.length <= 100
           ? post.content
@@ -240,17 +234,8 @@ const PostCard = ({ post }) => {
           ) : comments.length > 0 ? (
             comments.map((comment) => (
               <div key={comment._id} className="p-2 border-b">
-                {/* Debug logs */}
-                {console.log("Comment Author ID:", comment.user._id)}
-                {console.log("Logged-in User ID:", localStorage.getItem("userId"))}
-
-                {/* Useer's name */}
                 <p className="font-bold text-gray-800">{comment.user.username || comment.user.first_name}</p>
-                
-                {/* Comment text */}
                 <p className="text-gray-700">{comment.content}</p>
-                
-                {/* Editing and Deletion Options Based on User Authorization */}
                 {comment.user._id === localStorage.getItem("userId") && (
                   <div className="flex space-x-2">
                     <button
@@ -273,7 +258,6 @@ const PostCard = ({ post }) => {
             <p className="text-gray-500 italic">No comments yet.</p>
           )}
 
-          {/* Add Comment */}
           {isLoggedIn ? (
             <div className="add-comment mt-4">
               <textarea

@@ -144,14 +144,14 @@ const Navbar = ({ toggle, setToggle }) => {
           <Link
             to="/login"
             onClick={() => setToggle(false)}
-            className="px-3 py-1 bg-[#002046] text-white rounded hover:bg-[#e67e08] transition duration-300"
+            className="px-4 py-2 bg-[#002046] text-white rounded hover:bg-[#e67e08] font-semibold transition duration-300"
           >
             Login
           </Link>
           <Link
             to="/register"
             onClick={() => setToggle(false)}
-            className="px-3 py-1 bg-[#d5e2f1] text-black rounded hover:bg-[#e67e08] transition duration-300"
+            className="px-4 py-2 bg-[#d5e2f1] text-black rounded hover:bg-[#e67e08] font-semibold transition duration-300"
           >
             Register
           </Link>
@@ -167,7 +167,7 @@ const Navbar = ({ toggle, setToggle }) => {
         <Link
           to="/"
           onClick={() => setToggle(false)}
-          className="px-4 py-2 text-gray-700 hover:text-[#e67e08] transition duration-300"
+          className="px-6 py-3 text-gray-700 hover:text-[#e67e08] font-semibold transition duration-300"
         >
           Home
         </Link>
@@ -175,7 +175,7 @@ const Navbar = ({ toggle, setToggle }) => {
         <Link
           to="/posts"
           onClick={() => setToggle(false)}
-          className="px-4 py-2 text-gray-700 hover:text-[#e67e08] transition duration-300"
+          className="px-6 py-3 text-gray-700 hover:text-[#e67e08] font-semibold transition duration-300"
         >
           Posts
         </Link>
@@ -185,7 +185,7 @@ const Navbar = ({ toggle, setToggle }) => {
           <Link
             to="/posts/create-post"
             onClick={() => setToggle(false)}
-            className="px-4 py-2 text-gray-700 hover:text-[#e67e08] transition duration-300"
+            className="px-6 py-3 text-gray-700 hover:text-[#e67e08] font-semibold transition duration-300"
           >
             Create
           </Link>
@@ -194,7 +194,7 @@ const Navbar = ({ toggle, setToggle }) => {
         {/* Messenger Link */}
         <Link
           to="/src/util/Messenger.jsx"
-          className="px-4 py-2 text-gray-700 hover:text-[#e67e08] transition duration-300"
+          className="px-6 py-3 text-gray-700 hover:text-[#e67e08] font-semibold transition duration-300"
         >
           Messenger
         </Link>
@@ -204,7 +204,7 @@ const Navbar = ({ toggle, setToggle }) => {
           <Link
             to="/admin-dashboard"
             onClick={() => setToggle(false)}
-            className="px-4 py-2 text-gray-700 hover:text-[#e67e08] transition duration-300"
+            className="px-6 py-3 text-gray-700 hover:text-[#e67e08] font-semibold transition duration-300"
           >
             Admin Dashboard
           </Link>
@@ -215,5 +215,3 @@ const Navbar = ({ toggle, setToggle }) => {
 };
 
 export default Navbar;
-
-

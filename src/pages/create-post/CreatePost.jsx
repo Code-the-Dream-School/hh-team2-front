@@ -105,88 +105,90 @@ const CreatePost = () => {
     };
 
     return (
-        <div className="w-full max-w-2xl mt-8 mx-auto bg-white border-2 shadow-2xl rounded-md p-4">
-            <input
-                type="text"
-                placeholder="Post Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-2 border rounded-md mb-4 mt-4 text-3xl font-serif text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full p-2 border rounded-md mb-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-                <option value="" disabled>
-                    Select a category
-                </option>
-                {categories.map((cat) => (
-                    <option key={cat.id} value={cat.value}>
-                        {cat.name}
+        <div className="w-full min-h-screen bg-custom-light-blue flex justify-center items-center"> {/* Background applied here */}
+            <div className="w-full max-w-2xl mt-8 mx-auto bg-white border-2 shadow-2xl rounded-md p-4">
+                <input
+                    type="text"
+                    placeholder="Post Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full p-2 border rounded-md mb-4 mt-4 text-3xl font-serif text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full p-2 border rounded-md mb-4 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                    <option value="" disabled>
+                        Select a category
                     </option>
-                ))}
-            </select>
-            <textarea
-                className="w-full h-96 text-lg font-sans text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4 resize-none"
-                placeholder="Create your post"
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
-                rows="4"
-            />
-            {images && (
-                <div className="mt-4 w-full h-auto mb-4">
-                    <img
-                        src={URL.createObjectURL(images)}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
+                    {categories.map((cat) => (
+                        <option key={cat.id} value={cat.value}>
+                            {cat.name}
+                        </option>
+                    ))}
+                </select>
+                <textarea
+                    className="w-full h-96 text-lg font-sans text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4 resize-none"
+                    placeholder="Create your post"
+                    value={postContent}
+                    onChange={(e) => setPostContent(e.target.value)}
+                    rows="4"
+                />
+                {images && (
+                    <div className="mt-4 w-full h-auto mb-4">
+                        <img
+                            src={URL.createObjectURL(images)}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                )}
+
+                {images && (
+                    <button
+                        onClick={handleRemoveImage}
+                        className="block text-sm cursor-pointer bg-red-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
+                    >
+                        Remove Image
+                    </button>
+                )}
+
+                <div className="flex items-center space-x-4 mt-4">
+                    <label
+                        htmlFor="file-input"
+                        className="block text-sm cursor-pointer bg-gray-500 text-white py-2 px-4 rounded-md text-center hover:bg-gray-200 transition"
+                    >
+                        {images ? "Change Image" : "Choose an image"}
+                    </label>
+
+                    <input
+                        id="file-input"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
                     />
                 </div>
-            )}
 
-            {images && (
                 <button
-                    onClick={handleRemoveImage}
-                    className="block text-sm cursor-pointer bg-red-500 text-white py-2 px-4 rounded-md text-center hover:bg-blue-100 transition"
+                    onClick={handlePost}
+                    className={`mt-6 w-full bg-gray-800 text-white py-2 rounded-md ${
+                        loading
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:bg-blue-600"
+                    } transition`}
+                    disabled={loading}
                 >
-                    Remove Image
+                    {loading ? "Publishing..." : "Publish"}
                 </button>
-            )}
-
-            <div className="flex items-center space-x-4 mt-4">
-                <label
-                    htmlFor="file-input"
-                    className="block text-sm cursor-pointer bg-gray-500 text-white py-2 px-4 rounded-md text-center hover:bg-gray-200 transition"
-                >
-                    {images ? "Change Image" : "Choose an image"}
-                </label>
-
-                <input
-                    id="file-input"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                />
+                {error && <p className="text-red-500 mt-4">{error}</p>}
+                {success && (
+                    <p className="text-green-500 mt-4">
+                        Post created successfully!
+                    </p>
+                )}
             </div>
-
-            <button
-                onClick={handlePost}
-                className={`mt-6 w-full bg-gray-800 text-white py-2 rounded-md ${
-                    loading
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-blue-600"
-                } transition`}
-                disabled={loading}
-            >
-                {loading ? "Publishing..." : "Publish"}
-            </button>
-            {error && <p className="text-red-500 mt-4">{error}</p>}
-            {success && (
-                <p className="text-green-500 mt-4">
-                    Post created successfully!
-                </p>
-            )}
         </div>
     );
 };
