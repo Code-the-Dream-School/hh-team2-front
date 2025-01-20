@@ -106,7 +106,7 @@ const HeaderRight = () => {
   
   const logout = () => {
     dispatch(authActions.logout());
-    localStorage.removeItem("userInfo");
+    localStorage.removeItem("userinfo");
     localStorage.removeItem("token");
     toast.success("Logged out successfully");
   };
