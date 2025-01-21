@@ -46,7 +46,7 @@
 
 const Home = () => {
   return (
-    <section className="home-container w-full min-h-screen bg-[#fdfdfc] flex flex-col items-center justify-center px-6 sm:px-10">
+    <section className="home-container w-full min-h-screen bg-custom-light-blue flex flex-col items-center justify-center px-6 sm:px-10"> {/* Background added here */}
       {/* Main Content Section */}
       <div className="content-wrapper flex flex-col sm:flex-row items-center bg-white shadow-lg rounded-3xl overflow-hidden max-w-6xl w-full">
         {/* Left Column */}
@@ -55,8 +55,14 @@ const Home = () => {
             Welcome to Code the Dream Hub
           </h1>
           <p className="text-lg text-gray-700 leading-relaxed">
-            - a space for practicum students to share their journey, insights, and knowledge. This platform is designed to help you connect, learn, and grow together. Through blogs, posts, and comments, you can reflect on your experiences, share what you’ve learned, and engage with fellow students to inspire and support one another. Whether you’re looking to document your progress or contribute to the community, Code the Dream Hub is here to amplify your voice and foster meaningful conversations. Let’s code, learn, and dream together!
-          </p>
+   
+  <span className="mr-2">- a space for</span>
+  <span className="text-[#e65100]">Code The Dream</span> students to share their journey, insights, and knowledge. This platform is designed to help you connect, learn, and grow together. Through blogs, posts, and comments, you can reflect on your experiences, share what you’ve learned, and engage with fellow students to inspire and support one another. Whether you’re looking to document your progress or contribute to the community, Code the Dream Hub is here to amplify your voice and foster meaningful conversations. Let’s code, learn, and dream together!
+</p>
+
+
+
+
         </div>
 
         {/* Right Column (Image) */}
@@ -73,6 +79,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 

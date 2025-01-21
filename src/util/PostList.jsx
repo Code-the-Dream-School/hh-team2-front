@@ -4,7 +4,6 @@ import { fetchPosts } from "../redux/slices/postSlice";
 import PostCard from "./PostCard";
 import SearchBar from "./SearchBar";
 
-
 const PostList = () => {
   const dispatch = useDispatch();
 
@@ -12,10 +11,8 @@ const PostList = () => {
     (state) => state.posts
   );
 
-  // for search
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-
   const [currentSearchTerm, setCurrentSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 4;
@@ -29,45 +26,41 @@ const PostList = () => {
     { id: "general", name: "General" },
   ];
 
-
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
     setCurrentPage(1);
-    
-};
-  
+  };
 
-  // Fetch posts when search term or page changes
   useEffect(() => {
     dispatch(
-      fetchPosts({ search: searchTerm, page: currentPage, limit: postsPerPage, category: selectedCategory, })
+      fetchPosts({
+        search: searchTerm,
+        page: currentPage,
+        limit: postsPerPage,
+        category: selectedCategory,
+      })
     );
   }, [currentSearchTerm, currentPage, selectedCategory, dispatch]);
 
-  
   const handleSearchChange = (e) => {
     setSearchTerm(e);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const handleClickSearch = () => {
-    console.log("handle click :", searchTerm);
     setCurrentSearchTerm(searchTerm);
-    setCurrentPage(1); // Reset to the first page when searching
+    setCurrentPage(1);
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      
     }
   };
 
   const handleNextPage = () => {
-    console.log("page and totalPage", currentPage, totalPages);
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
-     
     }
   };
 
@@ -82,46 +75,45 @@ const PostList = () => {
   }
 
   return (
-    <div className="p-4">
-      <div className="home-hero-header text-center mb-8">
-        <img
-          src="/ctd.png"
-          alt="Code The Dream Logo"
-          className="logo-img w-100 h-24 mx-auto mb-6"
-        />
+    <div className="bg-custom-light-blue p-4">
+      {/* Category List - Placed above the search bar */}
+      <div className="flex justify-center mb-4">
+        <div className="w-full sm:w-1/3 mb-4 sm:mb-2">
+          <select
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="p-2 w-full max-w-md rounded-l-md border-1 border-[#e65100] focus:outline-none focus:border-[#e65100] hover:border-[#e65100]"
+          >
+            <option value="">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      {/* Search Bar */}
-      <SearchBar
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
-        onClickSearch={handleClickSearch}
-      />  <div className="flex justify-center my-4">
-        <select
-    value={selectedCategory}
-    onChange={handleCategoryChange}
-    className="p-2 rounded-md border-2 border-indigo-600 focus:outline-none focus:border-blue-800"
->
-    <option value="">All Categories</option>
-    {categories.map((cat) => (
-        <option key={cat.id} value={cat.name}>
-            {cat.name}
-        </option>
-    ))}
-</select>
+      {/* Search Bar - Now below the category list */}
+      <div className="flex justify-center mb-4">
+        <div className="w-full sm:w-1/2">
+          <SearchBar
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+            onClickSearch={handleClickSearch}
+          />
+        </div>
       </div>
-      
+
       {/* Post List */}
       {!loading && !error && (
-        <div>
-          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-            <div className="w-full max-w-lg space-y-6">
-              {posts.length > 0 ? (
-                posts.map((post) => <PostCard key={post._id} post={post} />)
-              ) : (
-                <p className="text-gray-500 text-center">No posts found</p>
-              )}
-            </div>
+        <div className="flex flex-col items-center">
+          <div className="w-full max-w-lg space-y-6">
+            {posts.length > 0 ? (
+              posts.map((post) => <PostCard key={post._id} post={post} />)
+            ) : (
+              <p className="text-gray-500 text-center">No posts found</p>
+            )}
           </div>
 
           {/* Pagination */}

@@ -84,10 +84,8 @@ const Messenger = () => {
         setTimeout(() => setMessageSent(false), 3000);
     };
 
-   
-
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-custom-light-blue p-4">
             <div className="w-full max-w-md bg-white p-4 rounded shadow">
                 <h1 className="text-xl font-bold text-center mb-4">
                     Messenger

@@ -100,24 +100,34 @@
 
 import { useSelector } from "react-redux";
 
-const HeaderLeft = () => {
+import { Bars3Icon } from "@heroicons/react/24/solid";
+const HeaderLeft = ({ toggle, setToggle }) => {
   const { user } = useSelector((state) => state.auth);
-
+  
   return (
     <div className="flex items-center w-full sm:w-auto sm:flex-shrink-0">
       {/* Logo Section */}
       <div className="flex items-center space-x-3 flex-shrink-0">
+        {/* Logo shown only on larger screens */}
         <img
           src="/ctd.png"
           alt="Code The Dream Logo"
-          className="logo-img w-60 h-12"
+          className="logo-img w-60 h-12 hidden sm:block"
         />
+        
+        {/* Hamburger Menu shown only on smaller screens */}
+        <div className="sm:hidden flex items-center cursor-pointer" onClick={() => setToggle((prev) => !prev)}>
+          <Bars3Icon className="h-6 w-6 text-gray-700" />
+          <span className="ml-2 text-gray-700 font-semibold">Menu</span>
+        </div>
       </div>
     </div>
   );
 };
 
 export default HeaderLeft;
+
+
 
 
 

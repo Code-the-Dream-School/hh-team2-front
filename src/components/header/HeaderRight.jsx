@@ -86,7 +86,6 @@
 // };
 // export default HeaderRight;
 
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";  
 import { Link } from "react-router-dom";  
@@ -94,7 +93,7 @@ import { HiOutlineUser, HiOutlineLogout } from "react-icons/hi";
 import { authActions } from "../../redux/slices/authSlice"; 
 import { toast } from "react-toastify";  
 
-const HeaderRight = ({ toggle, setToggle }) => {
+const HeaderRight = () => {
   const [dropdown, setDropdown] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -107,7 +106,7 @@ const HeaderRight = ({ toggle, setToggle }) => {
   
   const logout = () => {
     dispatch(authActions.logout());
-    localStorage.removeItem("userInfo");
+    localStorage.removeItem("userinfo");
     localStorage.removeItem("token");
     toast.success("Logged out successfully");
   };
@@ -116,18 +115,6 @@ const HeaderRight = ({ toggle, setToggle }) => {
 
   return (
     <div className="header-right flex items-center space-x-4 ml-auto pr-6">
-      <div
-        className="sm:hidden flex items-center cursor-pointer" 
-        onClick={() => setToggle((prev) => !prev)}
-      >
-        {toggle ? (
-          <XMarkIcon className="h-6 w-6 text-gray-700" />
-        ) : (
-          <Bars3Icon className="h-6 w-6 text-gray-700" />
-        )}
-        <span className="ml-2 text-gray-700 font-semibold">Menu</span>
-      </div>
-  
       {user ? (
         <div className="relative flex items-center space-x-2 justify-start">
           <div className="flex items-center space-x-2">
@@ -191,5 +178,5 @@ const HeaderRight = ({ toggle, setToggle }) => {
     </div>
   );
 };
-export default HeaderRight;
 
+export default HeaderRight;
